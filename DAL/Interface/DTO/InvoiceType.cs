@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DAL.Interface.DTO
 {
-    public enum InvoiceType
+    public enum Invoicetype
     {
         Purchase, Sale, CreditNote
     }

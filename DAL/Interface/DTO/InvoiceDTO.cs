@@ -7,7 +7,7 @@ namespace DAL.Interface.DTO
     public class InvoiceDTO
     {
         public string InvoiceNumber { get; set; }
-        public InvoiceType TypeOfInvoice { get; set; }
+        public Invoicetype TypeOfInvoice { get; set; }
         public ReferenceDTO InvoiceReference { get; set; }
         public OrderlistDTO InvoiceOrder { get; set; }
         public DateTime InvoiceDate { get; set; }

@@ -8,7 +8,7 @@ namespace Logic.Models
     public class Invoice
     {
         public string InvoiceNumber { get; set; }
-        public InvoiceType TypeOfInvoice { get; set; }
+        public Invoicetype TypeOfInvoice { get; set; }
         public Reference InvoiceReference { get; set; }
         public OrderList InvoiceOrder { get; set; }
         public DateTime InvoiceDate { get; set; }
