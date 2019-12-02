@@ -10,7 +10,7 @@ namespace DAL.Memory
         public static MockItem Testing = new MockItem();
         public OrderlistDTO OrderListMock = new OrderlistDTO
         {
-            OrderID = 1,
+            OrderID = "1",
             Amount = 2,
             OrderItem = Testing.ItemsMock
         };

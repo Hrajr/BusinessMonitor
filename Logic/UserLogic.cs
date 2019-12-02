@@ -39,9 +39,9 @@ namespace Logic
             return _context.AdminCheck(user.ConvertToDTO(user));
         }
 
-        public User GetUserInfo(User user)
+        public User GetUserInfo(string id)
         {
-            user = new User(_context.GetUserInfo(user.ConvertToDTO(user)));
+            var user = new User(_context.GetUserInfo(id));
             user = InfoDecryptor(user);
             return user;
         }

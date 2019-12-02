@@ -13,7 +13,7 @@ namespace DAL.SQLcontext
             throw new NotImplementedException();
         }
 
-        public UserDTO GetUserInfo(UserDTO userDTO)
+        public UserDTO GetUserInfo(string id)
         {
             throw new NotImplementedException();
         }

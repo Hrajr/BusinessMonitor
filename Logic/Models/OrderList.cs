@@ -7,7 +7,7 @@ namespace Logic.Models
 {
     public class OrderList
     {
-        public int OrderID { get; set; }
+        public string OrderID { get; set; }
         public List<Item> OrderItem { get; set; }
         public int Amount { get; set; }
 
@@ -32,13 +32,13 @@ namespace Logic.Models
             return returnedOrder;
         }
 
-        private bool AddItem(Item item)
+        public bool AddItem(string id)
         {
-            OrderItem.Add(item);
+            OrderItem.Add(new Item() { ItemID = id } );
             return true;
         }
 
-        private bool AddListOfItems(List<Item> items)
+        public bool AddListOfItems(List<Item> items)
         {
             OrderItem.AddRange(items);
             return true;

@@ -2,28 +2,6 @@
 @{
     ViewData["Title"] = "NewInvoice";
 }
-<style>
-    .btn-circle.btn-xl {
-        width: 70px;
-        height: 70px;
-        padding: 10px 16px;
-        border-radius: 35px;
-        font-size: 24px;
-        line-height: 1.33;
-    }
-
-    .btn-circle {
-        width: 30px;
-        height: 30px;
-        padding: 6px 0px;
-        border-radius: 15px;
-        text-align: center;
-        font-size: 12px;
-        line-height: 1.42857;
-    }
-</style>
-
-<h1>New Invoice</h1>
 
 <div class="row">
     <div class="col-md-4 order-md-2 mb-4">
@@ -56,51 +34,132 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="InvoiceNumber">Invoicenumber:</label>
-                    <input type="text" class="form-control" id="Invoicenumber" placeholder="Invoicenumber..." value="" required>
-                    <div class="invalid-feedback">
-                        Valid invoicenumber is required.
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Debit</span>
+                        </div>
+                        <input type="text" class="form-control" id="Invoicenumber" placeholder="Invoicenumber..." value="" required>
+                        <div class="invalid-feedback">
+                            Valid invoicenumber is required.
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="Invoicetype">Invoicetype:</label>
-                    <select class="custom-select d-block w-100" id="Invoicetype" required>
-                        <option value="">Choose...</option>
-                        <option>Purchase</option>
-                        <option>Sales</option>
-                        <option>Credit</option>
-                    </select>
-                </div>
-            </div><br />
-                <div class="mb-3">
-                    <h4 class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-muted">Your cart</span>
-                        <span class="badge badge-secondary badge-pill">3</span>
-                    </h4>
-                    <ul class="list-group mb-3">
-                        <li class="list-group-item d-flex justify-content-between lh-condensed">
-                            <div>
-                                <h6 class="my-0">Product name</h6>
-                                <small class="text-muted">Brief description</small>
-                            </div>
-                            <div>
-                                <small>Amount: </small>
-                                <input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" />
-                            </div>
-                            <strong><span class="text-danger">Delete</span></strong>
-                            <span class="text-muted">€12</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Total (EU)</span>
-                            <strong>€20</strong>
-                        </li>
-                    </ul>
-                </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="Invoicetype">Invoicetype:</label>
+                        <select class="custom-select d-block w-100" id="Invoicetype" required>
+                            <option value="">Choose...</option>
+                            <option>Purchase</option>
+                            <option>Sales</option>
+                            <option>Credit</option>
+                        </select>
+                    </div>
+                </div><br />
+            <div class="mb-3">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
+                    <span class="badge badge-secondary badge-pill">3</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">Product name</h6>
+                            <small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">My breef product description div.</small>
+                        </div>
+                        <div>
+                            <h6 class="my-0">Amount name</h6>
+                            <input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" />
+                        </div>
+                        <strong><a id="3" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong>
+                        <strong><span class="text-warning">Edit</span></strong>
+                        <span class="text-muted">€12</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (EU)</span>
+                        <strong>€20</strong>
+                    </li>
+                </ul>
+            </div>
 
             <div class="col-md-12 text-center">
-                <button class="btn btn-primary btn-lg" type="submit">Add item</button>
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ItemContainer">Add item</button>
             </div>
             <hr class="mb-4">
             <button class="btn btn-primary btn-lg btn-block" type="submit">Save invoice</button>
         </form>
     </div>
 </div>
+
+<div class="modal fade" id="ItemContainer" tabindex="-1" role="dialog" aria-labelledby="AddItem" aria-hidden="true" data-dismiss="DisableButton()">
+    <div class="modal-dialog modal-dialog-centered" role="document" oncancel="DisableButton()">
+        <div class="modal-content" oncancel="DisableButton()">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ItemContainer">Select the item you want to add</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Example multiple select</label>
+                    <select multiple class="form-control" id="NewItem" onchange="EnableButton()">
+                        <option id="0021">1</option>
+                        <option id="0022">2</option>
+                        <option id="0023">3</option>
+                        <option id="0024">4</option>
+                        <option id="0025">5</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning">Manage items</button>
+                <button id="btnAddItem" type="button" class="btn btn-primary" onclick="AddItem()" disabled>Add to invoice</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var AllItems = [];
+    function AddItem() {        
+        var e = document.getElementById("NewItem");
+        var result = e.options[e.selectedIndex].value;
+        AllItems.push(result);
+        console.log(AllItems);
+    };
+    function removeA(arr) {
+        var what, a = arguments, L = a.length, ax;
+        while (L > 1 && arr.length) {
+            what = a[--L];
+            while ((ax = arr.indexOf(what)) !== -1) {
+                arr.splice(ax, 1);
+            }
+        }
+        return arr;
+    };
+    function DeleteItem(item) {
+        console.log(item.id);
+        removeA(AllItems, item.id)
+        console.log(AllItems);
+    };
+    function EnableButton() {
+        var a = document.getElementById("btnAddItem");
+        a.disabled = false;
+    };
+    function DisableButton() {
+        var a = document.getElementById("btnAddItem");
+        a.disabled = true;
+    };
+</script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#AddItem").click(function () {
+                $("#ItemContainer").modal("hide");
+            });
+
+            $("#ItemContainer").on('hide.bs.modal', function () {
+                DisableButton();
+            });
+        });
+    </script>

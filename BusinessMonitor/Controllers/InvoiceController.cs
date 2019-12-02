@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BusinessMonitor.Models;
 using Logic;
+using Logic.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,8 @@ namespace BusinessMonitor.Controllers
     {
         private readonly InvoiceLogic _invoiceLogic;
         private readonly ReferenceLogic _referenceLogic;
+        private readonly UserLogic _userLogic;
+        private readonly OrderList _orderlist;
         private InvoiceViewModel model = new InvoiceViewModel();
         public InvoiceController()
         {
@@ -36,6 +39,21 @@ namespace BusinessMonitor.Controllers
         {
             //model.ListOfInvoices.AddRange(_invoiceLogic.GetInvoice());
             //return View(model);
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SaveInvoice(IFormCollection formCollection, OrderList order)
+        {
+            var newInvoice = new InvoiceViewModel()
+            {
+                InvoiceNumber = formCollection["Invoicenumber"],
+                InvoiceReference = _referenceLogic.GetReferenceByID(formCollection["ReferenceID"]),
+                InvoiceDate = Convert.ToDateTime(formCollection["CompanyName"]),
+                PayementDate = Convert.ToDateTime(formCollection["CompanyName"]),
+                InvoiceUser = _userLogic.GetUserInfo(formCollection["CompanyName"]),
+
+            };
             return View();
         }
 

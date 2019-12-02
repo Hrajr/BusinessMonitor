@@ -9,7 +9,7 @@ namespace DAL.Interface
     {
         bool AdminCheck(UserDTO userDTO);
         UserDTO Login(UserDTO userDTO);
-        UserDTO GetUserInfo(UserDTO userDTO);
+        UserDTO GetUserInfo(string id);
         bool Registration(UserDTO userDTO);
     }
 }
