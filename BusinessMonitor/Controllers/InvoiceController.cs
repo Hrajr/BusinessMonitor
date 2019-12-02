@@ -2,15 +2,86 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessMonitor.Models;
+using Logic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessMonitor.Controllers
 {
     public class InvoiceController : Controller
     {
-        public IActionResult Index()
+        private readonly InvoiceLogic _invoiceLogic;
+        private readonly ReferenceLogic _referenceLogic;
+        private InvoiceViewModel model = new InvoiceViewModel();
+        public InvoiceController()
         {
+            _invoiceLogic = new InvoiceLogic();
+            _referenceLogic = new ReferenceLogic();
+        }
+
+        [HttpGet]
+        [Route("Invoice")]
+        public IActionResult Invoice()
+        {
+            //var allInvoices = _invoiceLogic.GetInvoice();
+            //model.ListOfInvoices.AddRange(allInvoices);
+            //return View(model);
             return View();
+        }
+
+        [HttpGet]
+        [Route("NewInvoice")]
+        public IActionResult NewInvoice()
+        {
+            //model.ListOfInvoices.AddRange(_invoiceLogic.GetInvoice());
+            //return View(model);
+            return View();
+        }
+
+        [HttpPost]
+        [Route("SubmitInvoice")]
+        public IActionResult SubmitInvoice(IFormCollection formCollection)
+        {
+            if (!ModelState.IsValid)
+            { return View("AddInvoice"); }
+            var newInvoice = new InvoiceViewModel
+            {
+                //CompanyName = formCollection["CompanyName"],
+                //ContactName = formCollection["ContactName"],
+                //Address = formCollection["Address"],
+                //Zipcode = formCollection["Zipcode"],
+                //Place = formCollection["Place"],
+                //Country = formCollection["Country"],
+                //PhoneNumber = formCollection["PhoneNumber"],
+                //Email = formCollection["Email"],
+                //Bank = formCollection["Bank"],
+                //BIC = formCollection["BIC"],
+                //IBAN = formCollection["IBAN"],
+                //KvK = formCollection["KvK"],
+                //VAT = formCollection["VAT"],
+                //Doubtfull = Convert.ToBoolean(formCollection["Doubtfull"]),
+                //Date = DateTime.Now,
+                //Note = formCollection["Note"],
+            };
+            //if (_invoiceLogic.AddInvoice(newInvoice))
+            //{ return View("AddInvoice"); }
+            return View("Invoice");
+        }
+
+        [HttpPost]
+        public IActionResult RemoveInvoice(string id)
+        {
+            _invoiceLogic.RemoveInvoice(id);
+            return View("Invoice");
+        }
+
+        [HttpPost]
+        [Route("OpenInvoice")]
+        public IActionResult OpenInvoice(string id)
+        {
+            model.SingleInvoice = _invoiceLogic.GetInvoiceByID(id);
+            return View("OpenInvoice", model);
         }
     }
 }

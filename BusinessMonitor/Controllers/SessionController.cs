@@ -1,93 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using DAL.Interface;
+using Logic;
+using Logic.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessMonitor.Controllers
 {
     public class SessionController : Controller
     {
-        // GET: Session
-        public ActionResult Index()
+        private readonly UserLogic _userLogic;
+
+        public SessionController(iUser context)
         {
-            return View();
+            _userLogic = new UserLogic(context);
         }
 
-        // GET: Session/Details/5
-        public ActionResult Details(int id)
+        [Route("Login")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Login()
         {
-            return View();
+            return User.Identity.IsAuthenticated ? View("Profile") : View("Login");
         }
 
-        // GET: Session/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Session/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [AllowAnonymous]
+        public IActionResult LoginSubmit([Bind("Password, Username")] User user)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
+                return View("Login");
             }
-            catch
+
+            if (_userLogic.Login(user))
             {
-                return View();
+                InitUser(user);
+                if (_userLogic.AdminCheck(user))
+                {
+                    return RedirectToAction("AdminPage", "Home");
+                }
+                return RedirectToAction("Profile", "Home");
             }
-        }
-
-        // GET: Session/Edit/5
-        public ActionResult Edit(int id)
-        {
             return View();
         }
 
-        // POST: Session/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Logout()
         {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            LogOut();
+            return RedirectToAction("Login", "Session");
         }
 
-        // GET: Session/Delete/5
-        public ActionResult Delete(int id)
+        private async void LogOut()
         {
-            return View();
+            await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
-        // POST: Session/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        private async void InitUser(User user)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            user.Admin = _userLogic.AdminCheck(user);
+            var claims = new List<Claim>
+            { new Claim(ClaimTypes.Name, user.ID) };
+            if (user.Admin)
+            { claims.Add(new Claim(ClaimTypes.Role, "Admin")); }
+            else
+            { claims.Add(new Claim(ClaimTypes.Role, "User")); }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+
+            ClaimsPrincipal principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+            var authProp = new AuthenticationProperties
             {
-                return View();
-            }
+                IsPersistent = true,
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(20) //Cookies will be saved for 20 minutes
+            };
+            await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProp);
         }
     }
 }

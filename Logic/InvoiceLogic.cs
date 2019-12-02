@@ -20,8 +20,8 @@ namespace Logic
 
         public bool AddInvoice(Invoice invoice, string referenceID, OrderList order)
         {
-            OrderList InvoiceOrder = order;
-            Reference InvoiceReference = new Reference(_refContext.GetReferenceByID(referenceID));
+            //OrderList InvoiceOrder = order;
+            //Reference InvoiceReference = new Reference(_refContext.GetReferenceByID(referenceID));
             return _context.AddInvoice(invoice.ConvertToDTO(invoice));
         }
 
@@ -42,6 +42,8 @@ namespace Logic
 
         public Invoice GetInvoiceByID(string id)
         {
+            var returnedInvoice = _context.GetInvoiceByID(id);
+            var correspondingRef = _refContext.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
             return new Invoice(_context.GetInvoiceByID(id));
         }
     }

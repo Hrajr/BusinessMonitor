@@ -20,7 +20,7 @@ namespace DAL.SQLcontext
 
         public List<InvoiceDTO> GetInvoice()
         {
-            throw new NotImplementedException();
+            return new List<InvoiceDTO>() { new InvoiceDTO() { InvoiceNumber = "asda" } };
         }
 
         public InvoiceDTO GetInvoiceByID(string id)
