@@ -10,6 +10,7 @@ namespace Logic.Models
     public class Item
     {
         public string ItemID { get; set; }
+        public string ProductName { get; set; }
         public string Description { get; set; }
         public int VAT { get; set; }
         public double Price { get; set; }
@@ -19,8 +20,9 @@ namespace Logic.Models
         public Item()
         { }
 
-        public Item(string id, string description, int vat, double price, int amount, bool instock)
+        public Item(string id, string productName, string description, int vat, double price, int amount, bool instock)
         {
+            ProductName = productName;
             ItemID = id;
             Description = description;
             VAT = vat;
@@ -32,6 +34,7 @@ namespace Logic.Models
         public Item(ItemDTO item)
         {
             ItemID = item.ItemID;
+            ProductName = item.ProductName;
             Description = item.Description;
             VAT = item.VAT;
             Amount = item.Amount;
@@ -43,6 +46,7 @@ namespace Logic.Models
             var convertedItem = new ItemDTO()
             {
                 ItemID = item.ItemID,
+                ProductName = item.ProductName,
                 Description = item.Description,
                 VAT = item.VAT,
                 Price = item.Price,

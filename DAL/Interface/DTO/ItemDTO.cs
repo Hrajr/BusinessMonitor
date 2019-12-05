@@ -7,6 +7,7 @@ namespace DAL.Interface.DTO
     public class ItemDTO
     {
         public string ItemID { get; set; }
+        public string ProductName { get; set; }
         public string Description { get; set; }
         public int VAT { get; set; }
         public double Price { get; set; }
@@ -16,9 +17,10 @@ namespace DAL.Interface.DTO
         public ItemDTO()
         { }
 
-        public ItemDTO(string itemID, string description, int vat, double price, int amount, bool instock)
+        public ItemDTO(string itemID, string productName, string description, int vat, double price, int amount, bool instock)
         {
             ItemID = itemID;
+            ProductName = productName;
             Description = description;
             VAT = vat;
             Price = price;

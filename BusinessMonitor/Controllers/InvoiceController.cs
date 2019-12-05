@@ -30,7 +30,10 @@ namespace BusinessMonitor.Controllers
             //var allInvoices = _invoiceLogic.GetInvoice();
             //model.ListOfInvoices.AddRange(allInvoices);
             //return View(model);
-            return View();
+            var a = _invoiceLogic.GetInvoice();
+            var allInvoices = new InvoiceViewModel();
+            allInvoices.ListOfInvoices = a;
+            return View(allInvoices);
         }
 
         [HttpGet]
@@ -39,7 +42,8 @@ namespace BusinessMonitor.Controllers
         {
             //model.ListOfInvoices.AddRange(_invoiceLogic.GetInvoice());
             //return View(model);
-            return View();
+            var a = new InvoiceViewModel();
+            return View(a);
         }
 
         [HttpPost]
@@ -48,7 +52,7 @@ namespace BusinessMonitor.Controllers
             var newInvoice = new InvoiceViewModel()
             {
                 InvoiceNumber = formCollection["Invoicenumber"],
-                InvoiceReference = _referenceLogic.GetReferenceByID(formCollection["ReferenceID"]),
+                //InvoiceReference = _referenceLogic.GetReferenceByID(formCollection["ReferenceID"]),
                 InvoiceDate = Convert.ToDateTime(formCollection["CompanyName"]),
                 PayementDate = Convert.ToDateTime(formCollection["CompanyName"]),
                 InvoiceUser = _userLogic.GetUserInfo(formCollection["CompanyName"]),
@@ -100,6 +104,14 @@ namespace BusinessMonitor.Controllers
         {
             model.SingleInvoice = _invoiceLogic.GetInvoiceByID(id);
             return View("OpenInvoice", model);
+        }
+
+        [HttpPost]
+        [Route("EditInvoice")]
+        public IActionResult EditInvoice(string id)
+        {
+            model.SingleInvoice = _invoiceLogic.GetInvoiceByID(id);
+            return View("EditInvoice", model);
         }
     }
 }

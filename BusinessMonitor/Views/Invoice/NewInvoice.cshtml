@@ -4,89 +4,106 @@
 }
 
 <div class="row">
-    <div class="col-md-4 order-md-2 mb-4">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <label for="Reference">Select the reference:</label>
-        </h4>
-        <select class="custom-select d-block w-100" id="country" required>
-            <option value="">Choose...</option>
-            <option>United States</option>
-        </select><br />
-        <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                <div>
-                    <h6 class="my-0">Reference name</h6>
-                    <small class="text-muted">Contactname: </small><br />
-                    <small class="text-muted">Address 1:</small><br />
-                    <small class="text-muted">Address 2:</small><br />
-                    <small class="text-muted">IBAN: </small><br />
-                    <small class="text-muted">VAT: </small><br />
-                    <small class="text-muted">Doubtfull: </small><br />
-                    <small class="text-muted">Note: </small>
-                </div>
-                <span class="text-muted">ReferenceID</span>
-            </li>
-        </ul>
-    </div>
-    <div class="col-md-8 order-md-1">
-        <h4 class="mb-3">Billing address</h4>
-        <form class="needs-validation" novalidate>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="InvoiceNumber">Invoicenumber:</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Debit</span>
-                        </div>
-                        <input type="text" class="form-control" id="Invoicenumber" placeholder="Invoicenumber..." value="" required>
-                        <div class="invalid-feedback">
-                            Valid invoicenumber is required.
+        <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <label for="Reference">Select the reference:</label>
+            </h4>
+            <select class="custom-select d-block w-100" id="References" name="References" asp-for="ListOfReferences" required>
+                @foreach (var supplier in Model.ListOfReferences)
+                {
+                    <option value="@supplier.ID">@supplier.CompanyName</option>
+                }
+            </select><br />
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                        <h6 class="my-0">Reference name</h6>
+                        <small class="text-muted">Contactname: </small><br />
+                        <small class="text-muted">Address 1:</small><br />
+                        <small class="text-muted">Address 2:</small><br />
+                        <small class="text-muted">IBAN: </small><br />
+                        <small class="text-muted">VAT: </small><br />
+                        <small class="text-muted">Doubtfull: </small><br />
+                        <small class="text-muted">Note: </small>
+                    </div>
+                    <span class="text-muted">ReferenceID</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8 order-md-1">
+            <h4 class="mb-3">Billing address</h4>
+            <div class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="InvoiceNumber">Invoicenumber:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Debit</span>
+                            </div>
+                            <input type="text" class="form-control" id="Invoicenumber" placeholder="Invoicenumber..." value="" required>
+                            <div class="invalid-feedback">
+                                Valid invoicenumber is required.
+                            </div>
                         </div>
                     </div>
-                </div>
                     <div class="col-md-6 mb-3">
                         <label for="Invoicetype">Invoicetype:</label>
-                        <select class="custom-select d-block w-100" id="Invoicetype" required>
-                            <option value="">Choose...</option>
-                            <option>Purchase</option>
-                            <option>Sales</option>
-                            <option>Credit</option>
-                        </select>
+                        <select class="custom-select d-block w-100" id="InvoiceType" onchange="CheckInvoiceType(this)" name="InvoiceType" asp-for="SingleInvoice.TypeOfInvoice" required>
+                            @foreach (var InvType in Enum.GetNames(typeof(InvoiceViewModel.InvoiceType)))
+                            {
+                                <option value="@InvType">@InvType</option>
+                            }
+                        </select><br />
                     </div>
                 </div><br />
-            <div class="mb-3">
-                <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted">Your cart</span>
-                    <span class="badge badge-secondary badge-pill">3</span>
-                </h4>
-                <ul class="list-group mb-3">
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                            <h6 class="my-0">Product name</h6>
-                            <small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">My breef product description div.</small>
-                        </div>
-                        <div>
-                            <h6 class="my-0">Amount name</h6>
-                            <input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" />
-                        </div>
-                        <strong><a id="3" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong>
-                        <strong><span class="text-warning">Edit</span></strong>
-                        <span class="text-muted">€12</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>Total (EU)</span>
-                        <strong>€20</strong>
-                    </li>
-                </ul>
-            </div>
+                <div class="mb-3">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Your cart</span>
+                        <span class="badge badge-secondary badge-pill">3</span>
+                    </h4>
+                    <div class="list-group mb-3">
+                        <ul id="AddedItems" class="list-group bm-3">
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h6 class="my-0">Product name</h6>
+                                    <small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">My breef product description div.</small>
+                                </div>
+                                <div>
+                                    <h6 class="my-0">Amount name</h6>
+                                    <input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" />
+                                </div>
+                                <strong><a id="3" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong>
+                                <strong><a id="3" onclick="EditItem(this)" class="text-warning">Edit</a></strong>
+                                <span class="text-muted">€12</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h6 class="my-0">Product name</h6>
+                                    <small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">My breef product description div.</small>
+                                </div>
+                                <div>
+                                    <h6 class="my-0">Amount name</h6>
+                                    <input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" />
+                                </div>
+                                <strong><a id="3" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong>
+                                <strong><a id="3" onclick="EditItem(this)" class="text-warning">Edit</a></strong>
+                                <span class="text-muted">€12</span>
+                            </li>
+                        </ul>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total (EU)</span>
+                            <strong>€20</strong>
+                        </li>
+                    </div>
+                </div>
 
-            <div class="col-md-12 text-center">
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ItemContainer">Add item</button>
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ItemContainer">Add item</button>
+                </div>
+                <hr class="mb-4">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Save invoice</button>
             </div>
-            <hr class="mb-4">
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Save invoice</button>
-        </form>
-    </div>
+        </div>
 </div>
 
 <div class="modal fade" id="ItemContainer" tabindex="-1" role="dialog" aria-labelledby="AddItem" aria-hidden="true" data-dismiss="DisableButton()">
@@ -101,12 +118,11 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="exampleFormControlSelect2">Example multiple select</label>
-                    <select multiple class="form-control" id="NewItem" onchange="EnableButton()">
-                        <option id="0021">1</option>
-                        <option id="0022">2</option>
-                        <option id="0023">3</option>
-                        <option id="0024">4</option>
-                        <option id="0025">5</option>
+                    <select multiple class="form-control" id="NewItem" onchange="EnableButton()" asp-for="items">
+                        @foreach (var items in Model.items)
+                        {
+                            <option value="@items.ItemID:@items.Price:@items.Description:@items.ProductName">@items.ProductName</option>
+                        }
                     </select>
                 </div>
             </div>
@@ -121,12 +137,73 @@
 
 <script type="text/javascript">
     var AllItems = [];
+    var returnItems = [];
+    var parsed = "";
     function AddItem() {        
         var e = document.getElementById("NewItem");
-        var result = e.options[e.selectedIndex].value;
-        AllItems.push(result);
-        console.log(AllItems);
+        _id = e.options[e.selectedIndex].value;
+        AllItems.push(_id);
+        returnItems.push(_id.split(":"));
+        console.log(DublicateItems(returnItems));
+        ItemsToView();
     };
+    function MakeArrayUniqueAgain(arr) {
+        var uniques = [];
+        var itemsFound = {};
+        for (var i = 0, l = arr.length; i < l; i++) {
+            var stringified = JSON.stringify(arr[i]);
+            if (itemsFound[stringified]) { continue; }
+            uniques.push(arr[i]);
+            itemsFound[stringified] = true;
+        }
+        return uniques;
+    };
+    function DublicateItems(myArray) {
+        var result = [];
+        var frequency = myArray.reduce(function (seen, currentItem) {
+            if (currentItem in seen) {
+                seen[currentItem] = seen[currentItem] + 1;
+            } else {
+                seen[currentItem] = 1;
+            }
+            return seen;
+        }, {});
+        console.log(frequency);
+        for (var key in frequency) {
+            if (frequency[key] > 1) {
+                result.push(key.split(",").map(function (currentItem) {
+                    return currentItem;
+                }));
+            }
+        }
+        console.log(result);
+        return result;
+    };
+    function ItemsToView() {
+        //var returnDIV = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">' + returnItems[0][3] + '</h6><small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">' + returnItems[2] + '</small></div ><div><h6 class="my-0">Amount name</h6><input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" /></div><strong><a id="' + returnItems[0] + '" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong><strong><a id="' + returnItems[0] + '" onclick="EditItem(this)" class="text-warning">Edit</a></strong><span class="text-muted">' + returnItems[1] + '</span></li >';
+        var nHTML = '';
+        for (var i = 0; i < returnItems.length; i++) {
+            var div = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">' + returnItems[i][3] + '</h6><small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">' + returnItems[i][2] + '</small></div ><div><h6 class="my-0">Amount name</h6><input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" /></div><strong><a id="' + returnItems[i][0] + '" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong><strong><a id="' + returnItems[i][0] + '" onclick="EditItem(this)" class="text-warning">Edit</a></strong><span class="text-muted">' + returnItems[i][1] + '</span></li >';
+            nHTML += div;
+        };
+
+        //AllItems.forEach(function (item) {
+        //    nHTML += returnDIV;
+        //});
+        document.getElementById("AddedItems").innerHTML = nHTML
+    };
+    //function CheckDubbleItems(arr) {
+    //    var toReturn = arr;
+    //    console.log(toReturn);
+    //    var sorted_arr = toReturn.slice().sort();
+    //    var dubbleItem = [];
+    //    for (var i = 0; i < sorted_arr.length - 1; i++) {
+    //        if (sorted_arr[i + 1] == sorted_arr[i]) {
+    //            dubbleItem.push(sorted_arr[i]);
+    //        }
+    //    }
+    //    return dubbleItem;
+    //};
     function removeA(arr) {
         var what, a = arguments, L = a.length, ax;
         while (L > 1 && arr.length) {
@@ -142,6 +219,11 @@
         removeA(AllItems, item.id)
         console.log(AllItems);
     };
+    function EditItem(item) {
+        console.log(item.id);
+        removeA(AllItems, item.id)
+        console.log(AllItems);
+    };
     function EnableButton() {
         var a = document.getElementById("btnAddItem");
         a.disabled = false;
@@ -150,6 +232,37 @@
         var a = document.getElementById("btnAddItem");
         a.disabled = true;
     };
+    function CheckInvoiceType(nameSelect) {
+        if (nameSelect) {
+            SelectedType = document.getElementById("InvoiceType");
+            var SelectedOption = SelectedType.options[SelectedType.selectedIndex].value;
+            console.log(SelectedOption);
+
+            if (SelectedOption == "Sale") {
+                document.getElementById("Sale").style.display = "block";
+                document.getElementById("Purchase").style.display = "none";
+                document.getElementById("CR").style.display = "none";
+            }
+            else if (SelectedOption == "CreditNote") {
+                document.getElementById("Sale").style.display = "none";
+                document.getElementById("Purchase").style.display = "none";
+                document.getElementById("CR").style.display = "block";
+            }
+            else if (SelectedOption == "Purchase") {
+                document.getElementById("Sale").style.display = "none";
+                document.getElementById("Purchase").style.display = "block";
+                document.getElementById("CR").style.display = "none";
+            }
+            else {
+                document.getElementById("Sale").style.display = "none";
+                document.getElementById("CR").style.display = "none";
+            }
+        }
+        else {
+            document.getElementById("Sale").style.display = "none";
+            document.getElementById("CR").style.display = "none";
+        }
+    }
 </script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script type="text/javascript">
