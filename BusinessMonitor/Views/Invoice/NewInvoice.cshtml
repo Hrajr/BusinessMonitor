@@ -63,36 +63,11 @@
                     </h4>
                     <div class="list-group mb-3">
                         <ul id="AddedItems" class="list-group bm-3">
-                            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 class="my-0">Product name</h6>
-                                    <small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">My breef product description div.</small>
-                                </div>
-                                <div>
-                                    <h6 class="my-0">Amount name</h6>
-                                    <input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" />
-                                </div>
-                                <strong><a id="3" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong>
-                                <strong><a id="3" onclick="EditItem(this)" class="text-warning">Edit</a></strong>
-                                <span class="text-muted">€12</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 class="my-0">Product name</h6>
-                                    <small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">My breef product description div.</small>
-                                </div>
-                                <div>
-                                    <h6 class="my-0">Amount name</h6>
-                                    <input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" />
-                                </div>
-                                <strong><a id="3" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong>
-                                <strong><a id="3" onclick="EditItem(this)" class="text-warning">Edit</a></strong>
-                                <span class="text-muted">€12</span>
-                            </li>
+                            
                         </ul>
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Total (EU)</span>
-                            <strong>€20</strong>
+                            <strong id="TotalAmount">€0</strong>
                         </li>
                     </div>
                 </div>
@@ -142,79 +117,99 @@
     function AddItem() {        
         var e = document.getElementById("NewItem");
         _id = e.options[e.selectedIndex].value;
-        AllItems.push(_id); /*HIERRRROOOO*/
-        returnItems.push(_id.split(":"));
         var checkid = _id.split(":")[0];
         var name = _id.split(":")[3];
         var desc = _id.split(":")[2];
         var price = _id.split(":")[1];
-        if (!CheckExcisting(checkid, name, desc, price)) {
-            //InjectDIV(checkid, name, desc, price);
+        console.log(returnItems.length);
+        console.log(returnItems.length == 0);
+        if (returnItems.length == 0) {
+            console.log("Halooo");
+            returnItems.push(_id.split(":"));
+            PrintDIV(checkid, name, desc, price, true);
+        }
+        else {
+            IsAllreadyAdded(checkid, name, desc, price);
         }
     };
-    function CheckExcisting(ID, Name, Description, Price) {
-        var CurrentSituation = compressArray(returnItems);
-        for (var i = 0; i < CurrentSituation.length; i++) {
-            if (CurrentSituation[i].value.includes(ID) && CurrentSituation[i].count > 1) {
-                AddAmount(CurrentSituation[i].value, CurrentSituation[i].count);
-                console.log("WAT?");
-                return true;
-            }
-            else if (CurrentSituation != null) {
-                InjectDIV(ID, Name, Description, Price);
-                console.log("hierooo");
-                AddAmount(CurrentSituation[i].value, CurrentSituation[i].count);
-                return true;
+    function IsAllreadyAdded(ID, Name, Desc, Price) {
+        returnItems.forEach(function (item, index) {
+            if (item[0] == ID) {
+                console.log("werkt");
+                AddAmount(ID);
             }
             else {
-                InjectDIV(ID, Name, Description, Price);
-                AddAmount(CurrentSituation[i].value, CurrentSituation[i].count);
-                console.log(parseInt(document.getElementById("amountof" + ID).value) + 1);
-                return false;
+                PrintDIV(ID, Name, Desc, Price, true);
             }
+        });
+    }
+    function PrintDIV(ID, Name, Description, Price, Add) {
+        if (Add) {
+            var div = '<li id="' + ID + '" class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">' + Name + '</h6><small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">' + Description + '</small></div ><div><h6 class="my-0">Amount name</h6><input id="amountof' + ID + '" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" /></div><strong><a id="' + ID + '" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong><span class="text-muted">' + Price + '</span></li >';
+            document.getElementById("AddedItems").innerHTML += div;
+        }
+        else {
+            document.getElementById(ID).remove();
         }
     }
-    function AddAmount(ID, amount) {
-        //console.log(parseInt(document.getElementById(ID).childNodes[1].childNodes[1].value) + 1);
-        //console.log("ID = " + ID);
-        //console.log("amount = " + amount);
-        document.getElementById("amountof" + ID).value = amount;
-        //console.log(document.getElementById("amountof" + ID).value = amount);
+    function AddAmount(ID) {
+        var currentDIV = document.getElementById("amountof" + ID);
+        var currentAmount = parseInt(document.getElementById("amountof" + ID).value);
+        console.log(currentDIV.value = currentAmount + 1);
+        currentDIV.value = currentAmount + 1;
     }
-    function SortID(recArray) {
-        var returnArray = [];
-        for (var i = 0; i < recArray.length; i++) {
-                var a = new Object();
-            a.value = recArray[i];
-            returnArray.push(a.value[0]);
-        }
-        return returnArray;
-    };
-    function compressArray(original) {
-        original = SortID(returnItems)
-        var compressed = [];
-        var copy = original.slice(0);
-        for (var i = 0; i < original.length; i++) {
-            var myCount = 0;
-            for (var w = 0; w < copy.length; w++) {
-                if (original[i] == copy[w]) {
-                    myCount++;
-                    delete copy[w];
-                }
-            }
-            if (myCount > 0) {
-                var a = new Object();
-                a.value = original[i];
-                a.count = myCount;
-                compressed.push(a);
-            }
-        }
-        return compressed;
-    };
-    function InjectDIV(ID, Name, Description, Price) {
-        var div = '<li id="' + ID + '" class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">' + Name + '</h6><small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">' + Description + '</small></div ><div><h6 class="my-0">Amount name</h6><input id="amountof' + ID + '" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" /></div><strong><a id="' + ID + '" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong><span class="text-muted">' + Price + '</span></li >';
-        document.getElementById("AddedItems").innerHTML += div;
-    }
+    //function CheckExcisting(ID, Name, Description, Price) {
+    //    var CurrentSituation = compressArray(returnItems);
+    //    for (var i = 0; i < CurrentSituation.length; i++) {
+    //        if (CurrentSituation[i].value.includes(ID) && CurrentSituation[i].count > 1) {
+    //            AddAmount(CurrentSituation[i].value, CurrentSituation[i].count);
+    //            console.log("WAT?");
+    //            return true;
+    //        }
+    //        else if (CurrentSituation != null) {
+    //            InjectDIV(ID, Name, Description, Price);
+    //            console.log("hierooo");
+    //            AddAmount(CurrentSituation[i].value, CurrentSituation[i].count);
+    //            return true;
+    //        }
+    //        else {
+    //            InjectDIV(ID, Name, Description, Price);
+    //            AddAmount(CurrentSituation[i].value, CurrentSituation[i].count);
+    //            console.log(parseInt(document.getElementById("amountof" + ID).value) + 1);
+    //            return false;
+    //        }
+    //    }
+    //}
+    //function SortID(recArray) {
+    //    var returnArray = [];
+    //    for (var i = 0; i < recArray.length; i++) {
+    //            var a = new Object();
+    //        a.value = recArray[i];
+    //        returnArray.push(a.value[0]);
+    //    }
+    //    return returnArray;
+    //};
+    //function compressArray(original) {
+    //    original = SortID(returnItems)
+    //    var compressed = [];
+    //    var copy = original.slice(0);
+    //    for (var i = 0; i < original.length; i++) {
+    //        var myCount = 0;
+    //        for (var w = 0; w < copy.length; w++) {
+    //            if (original[i] == copy[w]) {
+    //                myCount++;
+    //                delete copy[w];
+    //            }
+    //        }
+    //        if (myCount > 0) {
+    //            var a = new Object();
+    //            a.value = original[i];
+    //            a.count = myCount;
+    //            compressed.push(a);
+    //        }
+    //    }
+    //    return compressed;
+    //};
     //function ItemsToView() {
     //    //var returnDIV = '<li class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">' + returnItems[0][3] + '</h6><small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">' + returnItems[2] + '</small></div ><div><h6 class="my-0">Amount name</h6><input id="amount" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" /></div><strong><a id="' + returnItems[0] + '" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong><strong><a id="' + returnItems[0] + '" onclick="EditItem(this)" class="text-warning">Edit</a></strong><span class="text-muted">' + returnItems[1] + '</span></li >';
     //    var nHTML = '';
