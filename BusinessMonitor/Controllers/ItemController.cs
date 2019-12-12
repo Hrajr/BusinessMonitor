@@ -23,30 +23,29 @@ namespace BusinessMonitor.Controllers
         [Route("Item")]
         public IActionResult Item()
         {
-            var allItems = _itemLogic.GetItem();
-            model.ListOfItems.AddRange(allItems);
+            model.ListOfItems = _itemLogic.GetItem();
+            //model.ListOfItems.AddRange(allItems);
             return View(model);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("AddItem")]
         public IActionResult AddItem()
         {
-            return View();
+            var a = new ItemViewModel();
+            return View(a);
         }
 
         [HttpPost]
-        [Route("SubmitItem")]
-        public IActionResult SubmitItem(IFormCollection formCollection)
+        public IActionResult SubmitItem(string Name, string Desc, string Price, string VAT, string Amount)
         {
-            if (!ModelState.IsValid)
-            { return View("AddItem"); }
             var newItem = new Item
             {
-                Description = formCollection["Description"],
-                VAT = Convert.ToInt16(formCollection["VAT"]),
-                Price = Convert.ToDouble(formCollection["Price"]),
-                Amount = Convert.ToInt16(formCollection["Amount"])
+                ProductName = Name,
+                Description = Desc,
+                VAT = Convert.ToInt16(VAT),
+                Price = Convert.ToDouble(Price),
+                Amount = Convert.ToInt16(Amount)
             };
             if (_itemLogic.AddItem(newItem))
             { return View("AddItem"); }
@@ -54,18 +53,43 @@ namespace BusinessMonitor.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveItem(string id)
+        public IActionResult SaveItem(string ID, string Name, string Desc, string Price, string VAT, string Amount)
         {
-            _itemLogic.RemoveItem(id);
-            return RedirectToAction("Item");
+            var newItem = new Item
+            {
+                ItemID = ID,
+                ProductName = Name,
+                Description = Desc,
+                VAT = Convert.ToInt16(VAT),
+                Price = Convert.ToDouble(Price),
+                Amount = Convert.ToInt16(Amount)
+            };
+            if (_itemLogic.EditItem(newItem))
+            { return View("EditItem"); }
+            return View("Item");
         }
 
         [HttpPost]
-        [Route("OpenItem")]
-        public IActionResult OpenItem(string id)
+        public IActionResult RemoveItem(string id)
         {
-            var openItem = new ItemViewModel.ViewItem(_itemLogic.GetItemByID(id));
-            return View("OpenItem", openItem);
+            _itemLogic.RemoveItem(id);
+            return View("Item");
+        }
+
+        [HttpGet]
+        [Route("EditItem")]
+        public IActionResult EditItem(string id)
+        {
+            var item = new ItemViewModel()
+            {
+                ItemID = "Test",
+                ProductName = "Name",
+                Description = "Desc",
+                Price = 2,
+                VAT = 202,
+                Amount = 50
+            };
+            return View("EditItem", item);
         }
     }
 }

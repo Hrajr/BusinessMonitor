@@ -11,5 +11,7 @@ namespace DAL.Interface
         bool RemoveItem(string id);
         ItemDTO GetItemByID(string id);
         List<ItemDTO> GetItem();
+        bool EditItem(ItemDTO item);
+        bool OpenItem(string id);
     }
 }

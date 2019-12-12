@@ -37,6 +37,7 @@ namespace Logic.Models
             ProductName = item.ProductName;
             Description = item.Description;
             VAT = item.VAT;
+            Price = item.Price;
             Amount = item.Amount;
             InStock = item.InStock;
         }

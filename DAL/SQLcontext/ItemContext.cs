@@ -27,5 +27,15 @@ namespace DAL.SQLcontext
         {
             throw new NotImplementedException();
         }
+
+        public bool EditItem(ItemDTO item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool OpenItem(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
