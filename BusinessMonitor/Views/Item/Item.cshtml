@@ -37,7 +37,10 @@
                     <td>@items.VAT</td>
                     <td>@items.Price</td>
                     <td>@items.Amount</td>
-                    <td>@items.InStock</td>
+                    <td>@if (items.InStock)
+                    {<i class="fas fa-check"></i> }
+                    else
+                    {<i class="fas fa-ban"></i>}</td>
                     <td><a id="@items.ItemID" asp-controller="Item" asp-action="EditItem" asp-route-id="@Model.ItemID" title="Edit"><button class="btn btn-primary btn-xs"><i class="fas fa-eye"></i></button></a></td>
                     <td><p id="@items.ItemID" onclick="RemoveItem('@items.ItemID')" title="Delete"><button class="btn btn-danger btn-xs"><i class="fas fa-trash-alt"></i></button></p></td>
                 </tr>

@@ -44,6 +44,13 @@
                                 <input type="number" class="form-control" id="Amount" placeholder="Amount" min="0" max="1000000" step="1">
                             </div>
                         </div>
+                        <div class="col-auto">
+                            <label>Available</label>
+                            <label class="sr-only" for="inlineFormInputGroup">Available</label>
+                            <div class="input-group mb-2">
+                                <input type="checkbox" class="form-control" id="Available" placeholder="Available">
+                            </div>
+                        </div>
                     </div><br />
         <div class="col-md-12 text-center">
             <button type="button" onclick="SubmitItem();" class="btn btn-info btn-lg">Add item</button>
@@ -59,6 +66,7 @@
         var Price = document.getElementById("Price").value;
         var VAT = document.getElementById("VAT").value;
         var Amount = document.getElementById("Amount").value;
+        var Available = document.getElementById("Available").checked;
         console.log(Amount);
         $.ajax({
             type: "Post",
@@ -68,7 +76,8 @@
                 'Desc': Desc,
                 'Price': Price,
                 'VAT': VAT,
-                'Amount': Amount
+                'Amount': Amount,
+                'Available': Available
             },
             success: function () {
                 console.log("geslaagd!");

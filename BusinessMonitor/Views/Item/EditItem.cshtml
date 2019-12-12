@@ -19,38 +19,45 @@
         </div>
         <div class="form-group">
             <label for="ProductDescription">Productdescription</label>
-            <textarea type="text" class="form-control" id="ProductDescription" placeholder="@Model.Description" disabled></textarea>
+            <textarea type="text" class="form-control" id="ProductDescription" placeholder="@Model.Description" disabled>@Model.Description</textarea>
         </div>
         <br /><hr /><br />
-        <div class="row">
-            <div class="col-auto">
-                <label>Price</label>
-                <label class="sr-only" for="inlineFormInputGroup">Price</label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">€</div>
-                    </div>
-                    <input type="text" class="form-control" id="Price" placeholder="Price" value="@Model.Price" disabled>
-                </div>
-            </div>
-            <div class="col-auto">
-                <label>VAT</label>
-                <label class="sr-only" for="inlineFormInputGroup">VAT</label>
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">%</div>
-                    </div>
-                    <input type="text" class="form-control" id="VAT" placeholder="VAT" value="@Model.VAT" disabled>
-                </div>
-            </div>
-            <div class="col-auto">
-                <label>Amount</label>
-                <label class="sr-only" for="inlineFormInputGroup">Amount</label>
-                <div class="input-group mb-2">
-                    <input type="number" class="form-control" id="Amount" placeholder="Amount" value="@Model.Amount" min="0" max="1000000" step="1" disabled>
-                </div>
-            </div>
-        </div><br />
+                    <div class="row">
+                        <div class="col-auto">
+                            <label>Price</label>
+                            <label class="sr-only" for="inlineFormInputGroup">Price</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">€</div>
+                                </div>
+                                <input type="text" class="form-control" id="Price" placeholder="Price" value="@Model.Price" disabled>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <label>VAT</label>
+                            <label class="sr-only" for="inlineFormInputGroup">VAT</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">%</div>
+                                </div>
+                                <input type="text" class="form-control" id="VAT" placeholder="VAT" value="@Model.VAT" disabled>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <label>Amount</label>
+                            <label class="sr-only" for="inlineFormInputGroup">Amount</label>
+                            <div class="input-group mb-2">
+                                <input type="number" class="form-control" id="Amount" placeholder="Amount" value="@Model.Amount" min="0" max="1000000" step="1" disabled>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <label>Available</label>
+                            <label class="sr-only" for="inlineFormInputGroup">Available</label>
+                            <div class="input-group mb-2">
+                                <input type="checkbox" class="form-control" id="Available" placeholder="Available" @if(Model.InStock){<text> checked </text>} disabled>
+                            </div>
+                        </div>
+                    </div><br />
         <div class="col-md-12 text-center">
             <button type="button" onclick="SubmitItem()" class="btn btn-info btn-lg">Save item</button>
         </div>
@@ -66,6 +73,7 @@
         var Price = document.getElementById("Price").value;
         var VAT = document.getElementById("VAT").value;
         var Amount = document.getElementById("Amount").value;
+        var Available = document.getElementById("Available").checked;
         $.ajax({
             type: "Post",
             url: '/Item/SaveItem',
@@ -75,7 +83,8 @@
                 'Desc': Desc,
                 'Price': Price,
                 'VAT': VAT,
-                'Amount': Amount
+                'Amount': Amount,
+                'Available': Available
             },
             success: function () {
                 console.log("geslaagd!");
@@ -90,5 +99,6 @@
         document.getElementById("Price").disabled = false;
         document.getElementById("VAT").disabled = false;
         document.getElementById("Amount").disabled = false;
+        document.getElementById("Available").disabled = false;
     }
 </script>

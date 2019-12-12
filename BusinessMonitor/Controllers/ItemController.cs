@@ -37,7 +37,7 @@ namespace BusinessMonitor.Controllers
         }
 
         [HttpPost]
-        public IActionResult SubmitItem(string Name, string Desc, string Price, string VAT, string Amount)
+        public IActionResult SubmitItem(string Name, string Desc, string Price, string VAT, string Amount, bool Available)
         {
             var newItem = new Item
             {
@@ -45,7 +45,8 @@ namespace BusinessMonitor.Controllers
                 Description = Desc,
                 VAT = Convert.ToInt16(VAT),
                 Price = Convert.ToDouble(Price),
-                Amount = Convert.ToInt16(Amount)
+                Amount = Convert.ToInt16(Amount),
+                InStock = Available
             };
             if (_itemLogic.AddItem(newItem))
             { return View("AddItem"); }
@@ -53,7 +54,7 @@ namespace BusinessMonitor.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveItem(string ID, string Name, string Desc, string Price, string VAT, string Amount)
+        public IActionResult SaveItem(string ID, string Name, string Desc, string Price, string VAT, string Amount, bool Available)
         {
             var newItem = new Item
             {
@@ -62,7 +63,8 @@ namespace BusinessMonitor.Controllers
                 Description = Desc,
                 VAT = Convert.ToInt16(VAT),
                 Price = Convert.ToDouble(Price),
-                Amount = Convert.ToInt16(Amount)
+                Amount = Convert.ToInt16(Amount),
+                InStock = Available
             };
             if (_itemLogic.EditItem(newItem))
             { return View("EditItem"); }
@@ -87,7 +89,8 @@ namespace BusinessMonitor.Controllers
                 Description = "Desc",
                 Price = 2,
                 VAT = 202,
-                Amount = 50
+                Amount = 50,
+                InStock = false
             };
             return View("EditItem", item);
         }
