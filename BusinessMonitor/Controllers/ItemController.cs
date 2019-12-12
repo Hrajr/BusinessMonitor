@@ -32,8 +32,7 @@ namespace BusinessMonitor.Controllers
         [Route("AddItem")]
         public IActionResult AddItem()
         {
-            var a = new ItemViewModel();
-            return View(a);
+            return View();
         }
 
         [HttpPost]

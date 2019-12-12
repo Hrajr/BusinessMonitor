@@ -19,6 +19,7 @@ namespace DAL.Memory
 
         public ReferenceDTO ReferenceMock = new ReferenceDTO
         {
+            ID = "TestID",
             CompanyName = "TestCompany",
             ContactName = "TestContactName",
             Address = "TestAddress",
@@ -39,6 +40,7 @@ namespace DAL.Memory
 
         public ReferenceDTO ReferenceMock2 = new ReferenceDTO
         {
+            ID = "TestID2",
             CompanyName = "TestCompany2",
             ContactName = "TestContactName2",
             Address = "TestAddress2",
@@ -59,6 +61,7 @@ namespace DAL.Memory
 
         public ReferenceDTO ReferenceMock3 = new ReferenceDTO
         {
+            ID = "TestID3",
             CompanyName = "TestCompany3",
             ContactName = "TestContactName3",
             Address = "TestAddress3",
@@ -72,7 +75,7 @@ namespace DAL.Memory
             IBAN = "TestIBAN3",
             KvK = "TestKvK3",
             VAT = "TestVAT3",
-            Doubtfull = false,
+            Doubtfull = true,
             Date = DateTime.Now.Date,
             Note = "This is a test company 3 for testing purpose only"
         };

@@ -24,11 +24,11 @@ namespace BusinessMonitor.Controllers
         public IActionResult Reference()
         {
             var allReferences = _referenceLogic.GetReference();
-            model.ListOfReferences.AddRange(allReferences);
+            model.ListOfReferences = allReferences;
             return View(model);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("AddReference")]
         public IActionResult AddReference()
         {
