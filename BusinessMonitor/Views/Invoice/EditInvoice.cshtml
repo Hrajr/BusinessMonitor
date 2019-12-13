@@ -1,7 +1,169 @@
-﻿
+﻿@model InvoiceViewModel
 @{
     ViewData["Title"] = "EditInvoice";
 }
 
-<h1>EditInvoice</h1>
+<div class="col-11 shadow" style="padding-bottom:20px;padding-top:20px;">
+    <center>
+        <h1>
+            Edit: @Model.InvoiceNumber
+            <a class="btn btn-warning btn-xs" onclick="Enable()"><i class="fas fa-edit"></i></a>
+        </h1>
+        <small>Created by: @Model.InvoiceUser.Firstname, @Model.InvoiceUser.Lastname</small>
+    </center>
+    <div class="row">
+        <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <label for="Reference">Select the reference:</label>
+            </h4>
+            <select class="custom-select d-block w-100" id="References" name="References" asp-for="ListOfReferences" required>
+                @foreach (var supplier in Model.ListOfReferences)
+                {
+                    <option value="@supplier.ID">@supplier.CompanyName</option>
+                }
+            </select><br />
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                        <h6 class="my-0">@Model.InvoiceReference.CompanyName</h6>
+                        <small class="text-muted">Contactname: @Model.InvoiceReference.ContactName</small><br />
+                        <small class="text-muted">Address 1: @Model.InvoiceReference.Address, @Model.InvoiceReference.Zipcode</small><br />
+                        <small class="text-muted">Address 2: @Model.InvoiceReference.Place, @Model.InvoiceReference.Country</small><br />
+                        <small class="text-muted">IBAN: @Model.InvoiceReference.IBAN</small><br />
+                        <small class="text-muted">VAT: @Model.InvoiceReference.VAT</small><br />
+                        <small class="text-muted">Doubtfull: @if (Model.InvoiceReference.Doubtfull) {<i class="fas fa-check"></i> } else{<i class="fas fa-ban"></i>} </small><br />
+                        <small class="text-muted">Note: @Model.InvoiceReference.Note</small>
+                    </div>
+                    <span class="text-muted">@Model.InvoiceReference.ID</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8 order-md-1">
+            <h4 class="mb-3">Billing address</h4>
+            <div class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="InvoiceNumber">Invoicenumber:</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Debit</span>
+                            </div>
+                            <input type="text" class="form-control" id="Invoicenumber" placeholder="Invoicenumber..." value="@Model.InvoiceNumber" required>
+                            <div class="invalid-feedback">
+                                Valid invoicenumber is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="Invoicetype">Invoicetype:</label>
+                        <select class="custom-select d-block w-100" id="InvoiceType" onchange="CheckInvoiceType(this)" name="InvoiceType" asp-for="SingleInvoice.TypeOfInvoice" required>
+                            @foreach (var InvType in Enum.GetNames(typeof(InvoiceViewModel.InvoiceType)))
+                            {
+                                <option value="@InvType">@InvType</option>
+                            }
+                        </select><br />
+                    </div>
+                </div><br />
+                <div class="mb-3">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Your cart</span>
+                        <span class="badge badge-secondary badge-pill">3</span>
+                    </h4>
+                    <div class="list-group mb-3">
+                        <ul id="AddedItems" class="list-group bm-3">
+                            @foreach (var item in Model.InvoiceOrder.OrderItem)
+                            {
+                                <li id="@item.ItemID" class="list-group-item d-flex justify-content-between lh-condensed">
+                                    <div>
+                                        <h6 class="my-0">@item.ProductName</h6>
+                                        <small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">@item.Description</small>
+                                    </div>
+                                    <div><h6 class="my-0">Amount name</h6><input id="amountof' @item.ItemID '" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" /></div>
+                                    <strong><a id="@item.ItemID" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong><span class="text-muted">@item.Price</span>
+                                </li>
+                            }
+                        </ul>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total (EU)</span>
+                            <strong id="TotalAmount">€0</strong>
+                        </li>
+                    </div>
+                </div>
 
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ItemContainer">Add item</button>
+                </div>
+                <hr class="mb-4">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Save invoice</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ItemContainer" tabindex="-1" role="dialog" aria-labelledby="AddItem" aria-hidden="true" data-dismiss="DisableButton()">
+        <div class="modal-dialog modal-dialog-centered" role="document" oncancel="DisableButton()">
+            <div class="modal-content" oncancel="DisableButton()">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ItemContainer">Select the item you want to add</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect2">Example multiple select</label>
+                        <select multiple class="form-control" id="NewItem" onchange="EnableButton()" asp-for="items">
+                            @foreach (var items in Model.items)
+                            {
+                                <option value="@items.ItemID:@items.Price:@items.Description:@items.ProductName">@items.ProductName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light btn-outline-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-warning">Manage items</button>
+                    <button id="btnAddItem" type="button" class="btn btn-primary" onclick="AddItem()" disabled>Add to invoice</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    var ID = "@Model.ItemID";
+    function SubmitItem() {
+        var Name = document.getElementById("ProductName").value;
+        var Desc = document.getElementById("ProductDescription").value;
+        var Price = document.getElementById("Price").value;
+        var VAT = document.getElementById("VAT").value;
+        var Amount = document.getElementById("Amount").value;
+        var Available = document.getElementById("Available").checked;
+        $.ajax({
+            type: "Post",
+            url: '/Item/SaveItem',
+            data: {
+                'ID': ID,
+                'Name': Name,
+                'Desc': Desc,
+                'Price': Price,
+                'VAT': VAT,
+                'Amount': Amount,
+                'Available': Available
+            },
+            success: function () {
+                console.log("geslaagd!");
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function Enable() {
+        document.getElementById("ProductName").disabled = false;
+        document.getElementById("ProductDescription").disabled = false;
+        document.getElementById("Price").disabled = false;
+        document.getElementById("VAT").disabled = false;
+        document.getElementById("Amount").disabled = false;
+        document.getElementById("Available").disabled = false;
+    }
+</script>*@
