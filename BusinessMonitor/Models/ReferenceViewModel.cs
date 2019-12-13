@@ -8,8 +8,6 @@ namespace BusinessMonitor.Models
 {
     public class ReferenceViewModel
     {
-        public class SingleReference
-        {
             public string ID { get; set; }
             public string CompanyName { get; set; }
             public string ContactName { get; set; }
@@ -28,7 +26,10 @@ namespace BusinessMonitor.Models
             public DateTime Date { get; set; }
             public string Note { get; set; }
 
-            public SingleReference(Reference reference)
+        public ReferenceViewModel()
+        { }
+
+            public ReferenceViewModel(Reference reference)
             {
                 ID = reference.ID;
                 CompanyName = reference.CompanyName;
@@ -48,7 +49,7 @@ namespace BusinessMonitor.Models
                 Date = reference.Date;
                 Note = reference.Note;
             }
-        }
+        
         public List<Reference> ListOfReferences;
     }
 }

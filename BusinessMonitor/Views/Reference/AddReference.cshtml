@@ -1,9 +1,9 @@
-﻿
+﻿@model ReferenceViewModel
 @{
     ViewData["Title"] = "AddReference";
 }
 
-<form class="container">
+<form asp-controller="Reference" class="container">
     <br />
     <div class="col-11 shadow" style="padding-bottom:20px;padding-top:20px;padding-left:3%;padding-right:3%;">
         <center><h1>Add new reference</h1></center><br />
@@ -11,80 +11,80 @@
             <div class="col-md-7">
                 <div class="form-group">
                     <label for="CompanyName">Companyname</label>
-                    <input type="text" class="form-control" id="Companyname" placeholder="Enter the companyname">
+                    <input type="text" class="form-control" name="Companyname" id="Companyname" placeholder="Enter the companyname">
                 </div>
                 <div class="form-group">
                     <label for="'KvK">KvK</label>
-                    <input type="text" class="form-control" id="KvK" placeholder="Enter KvK">
+                    <input type="text" class="form-control" name="KvK" id="KvK" placeholder="Enter KvK">
                 </div>
                 <div class="form-group">
                     <label for="VAT">VAT</label>
-                    <input type="text" class="form-control" id="VAT" placeholder="Enter VAT">
+                    <input type="text" class="form-control" name="VAT" id="VAT" placeholder="Enter VAT">
                 </div>
                 <div class="form-group">
                     <label for="IBAN">IBAN</label>
-                    <input type="text" class="form-control" id="IBAN" placeholder="Enter IBAN">
+                    <input type="text" class="form-control" name="IBAN" id="IBAN" placeholder="Enter IBAN">
                 </div>
                 <div class="row">
                     <div class="col-auto">
                         <label>Bank</label>
                         <label class="sr-only" for="inlineFormInputGroup">Bank</label>
                         <div class="input-group mb-2">
-                            <input type="text" class="form-control" id="Bank" placeholder="Bank">
+                            <input type="text" class="form-control" name="Bank" id="Bank" placeholder="Bank">
                         </div>
                     </div>
                     <div class="col-auto">
                         <label>BIC</label>
                         <label class="sr-only" for="inlineFormInputGroup">BIC</label>
                         <div class="input-group mb-2">
-                            <input type="text" class="form-control" id="BIC" placeholder="BIC">
+                            <input type="text" class="form-control" name="BIC" id="BIC" placeholder="BIC">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="Note">Note</label>
-                    <textarea type="text" class="form-control" id="Note" placeholder="Enter notes here..."></textarea>
+                    <textarea type="text" class="form-control" name="Note" id="Note" placeholder="Enter notes here..."></textarea>
                 </div>
             </div>
             <div class="col-md-5">
                 <label>Contact information:</label>
                 <div class="form-group">
                     <a for="Contactname">Contactname</a>
-                    <input type="text" class="form-control form-control-sm" id="Contactname" placeholder="Enter contactname">
+                    <input type="text" class="form-control form-control-sm" name="Contactname" id="Contactname" placeholder="Enter contactname">
                 </div>
                 <div class="form-group">
                     <a for="Address">Address</a>
-                    <input type="text" class="form-control form-control-sm" id="Address" placeholder="Enter address">
+                    <input type="text" class="form-control form-control-sm" name="Address" id="Address" placeholder="Enter address">
                 </div>
                 <div class="form-group">
                     <a for="Zipcode">Zipcode</a>
-                    <input type="text" class="form-control form-control-sm" id="Zipcode" placeholder="Enter zipcode">
+                    <input type="text" class="form-control form-control-sm" name="Zipcode" id="Zipcode" placeholder="Enter zipcode">
                 </div>
                 <div class="form-group">
                     <a for="Place">Place</a>
-                    <input type="text" class="form-control form-control-sm" id="Place" placeholder="Enter place">
+                    <input type="text" class="form-control form-control-sm" name="Place" id="Place" placeholder="Enter place">
                 </div>
                 <div class="form-group">
                     <a for="Country">Country</a>
-                    <input type="text" class="form-control form-control-sm" id="Country" placeholder="Enter country">
+                    <input type="text" class="form-control form-control-sm" name="Country" id="Country" placeholder="Enter country">
                 </div>
                 <div class="form-group">
                     <a for="Phonenumber">Phonenumber</a>
-                    <input type="text" class="form-control form-control-sm" id="Phonenumber" placeholder="Enter phonenumber">
+                    <input type="text" class="form-control form-control-sm" name="Phonenumber" id="Phonenumber" placeholder="Enter phonenumber">
                 </div>
                 <div class="form-group">
                     <a for="Email">Email</a>
-                    <input type="text" class="form-control form-control-sm" id="Email" placeholder="Enter email">
+                    <input type="text" class="form-control form-control-sm" name="Email" id="Email" placeholder="Enter email">
                 </div>
             </div>
         </div><br />
         <div class="col-md-12 text-center">
-            <button type="button" onclick="SubmitItem();" class="btn btn-info btn-lg">Add item</button>
+            <button type="submit" asp-action="SubmitReference" class="btn btn-info btn-lg">Add item</button>
         </div>
-    </div>
+    </div>  
 </form>
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
+@*<script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
     function SubmitItem(Name, Desc, Price, VAT, Amount) {
         var Name = document.getElementById("ProductName").value;
@@ -110,4 +110,4 @@
             }
         });
     }
-</script>
+</script>*@

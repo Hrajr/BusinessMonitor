@@ -49,7 +49,7 @@ namespace BusinessMonitor.Controllers
             };
             if (_itemLogic.AddItem(newItem))
             { return View("AddItem"); }
-            return View("Item");
+            return RedirectToAction("Item");
         }
 
         [HttpPost]

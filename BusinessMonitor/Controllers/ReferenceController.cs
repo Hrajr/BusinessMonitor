@@ -39,8 +39,7 @@ namespace BusinessMonitor.Controllers
         [Route("SubmitReference")]
         public IActionResult SubmitReference(IFormCollection formCollection)
         {
-            if (!ModelState.IsValid)
-            { return View("AddReference"); }
+            var test = false;
             var newReference = new Reference
             {
                 CompanyName = formCollection["CompanyName"],
@@ -60,9 +59,62 @@ namespace BusinessMonitor.Controllers
                 Date = DateTime.Now,
                 Note = formCollection["Note"],
             };
-            if (_referenceLogic.AddReference(newReference))
+            if (test)
             { return View("AddReference"); }
+            return RedirectToAction("Reference");
+        }
+
+        [HttpPost]
+        public IActionResult SaveReference(string id, string companyname, string contactname, string address, string zipcode, string place, string country, string phone, string email, string kvk, string vat, string bank, string iban, string bic, string note, bool doubtfull)
+        {
+            var reference = new Reference()
+            {
+                ID = id,
+                CompanyName = companyname,
+                ContactName = contactname,
+                Address = address,
+                Zipcode = zipcode,
+                Place = place,
+                Country = country,
+                PhoneNumber = phone,
+                Email = email,
+                KvK = kvk,
+                VAT = vat,
+                Bank = bank,
+                BIC = bic,
+                IBAN = iban,
+                Note = note,
+                Doubtfull = doubtfull
+            };
+            if (_referenceLogic.EditReference(reference))
+            { return View("EditReference"); }
             return View("Reference");
+        }
+
+        [HttpGet]
+        [Route("EditReference")]
+        public IActionResult EditReference(string id)
+        {
+            var item = new ReferenceViewModel()
+            {
+                ID = "TestID",
+                CompanyName = "TestCompany",
+                ContactName = "Dirk van den Veen",
+                Address = "Exeaten 1",
+                Zipcode = "6044 BA",
+                Place = "Baexem",
+                Country = "The Netherlands",
+                KvK = "TestKVK",
+                IBAN = "TestIBAN",
+                Bank = "ING",
+                BIC = "INGB",
+                VAT = "VATnum",
+                PhoneNumber = "TestPhone",
+                Email = "TestEmail",
+                Doubtfull = true,
+                Note = "He didn't payed for 3 years!"
+            };
+            return View("EditReference", item);
         }
 
         [HttpPost]
@@ -70,14 +122,6 @@ namespace BusinessMonitor.Controllers
         {
             _referenceLogic.RemoveReference(id);
             return View("Reference");
-        }
-
-        [HttpPost]
-        [Route("OpenReference")]
-        public IActionResult OpenReference(string id)
-        {
-            var openReference = new ReferenceViewModel.SingleReference(_referenceLogic.GetReferenceByID(id));
-            return View("OpenReference", openReference);
         }
     }
 }

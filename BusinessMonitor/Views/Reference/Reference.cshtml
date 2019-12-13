@@ -64,16 +64,7 @@
 </script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script type="text/javascript">
-    function OpenItem(ID) {
-        $.ajax({
-            type: "Get",
-            url: '/Reference/OpenReference',
-            data: {
-                'id': ID,
-            }
-        });
-    }
-    function RemoveItem(ID) {
+    function RemoveReference(ID) {
         $.ajax({
             type: "Post",
             url: '/Reference/RemoveReference',

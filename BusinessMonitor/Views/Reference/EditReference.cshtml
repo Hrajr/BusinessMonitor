@@ -1,7 +1,153 @@
-﻿
+﻿@model ReferenceViewModel
 @{
     ViewData["Title"] = "EditReference";
 }
 
-<h1>EditReference</h1>
+<form class="container">
+    <br />
+    <div class="col-11 shadow" style="padding-bottom:20px;padding-top:20px;padding-left:3%;padding-right:3%;">
+          <center>
+              <h1>
+                  Reference: @Model.CompanyName (@Model.ID)
+                  <a class="btn btn-warning btn-xs" onclick="Enable()"><i class="fas fa-edit"></i></a>
+              </h1>
+          </center><br />
+        <div class="row">
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label for="CompanyName">Companyname</label>
+                    <input type="text" class="form-control" id="Companyname" placeholder="Enter the companyname" value="@Model.CompanyName" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="'KvK">KvK</label>
+                    <input type="text" class="form-control" id="KvK" placeholder="Enter KvK" value="@Model.KvK" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="VAT">VAT</label>
+                    <input type="text" class="form-control" id="VAT" placeholder="Enter VAT" value="@Model.VAT" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="IBAN">IBAN</label>
+                    <input type="text" class="form-control" id="IBAN" placeholder="Enter IBAN" value="@Model.IBAN" disabled>
+                </div>
+                <div class="row">
+                    <div class="col-auto">
+                        <label>Bank</label>
+                        <label class="sr-only" for="inlineFormInputGroup">Bank</label>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" id="Bank" placeholder="Bank" value="@Model.Bank" disabled>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <label>BIC</label>
+                        <label class="sr-only" for="inlineFormInputGroup">BIC</label>
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" id="BIC" placeholder="BIC" value="@Model.BIC" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Note">Note</label>
+                    <textarea type="text" class="form-control" id="Note" placeholder="Enter notes here..." disabled>@Model.Note</textarea>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label>Contact information:</label>
+                <div class="form-group">
+                    <a for="Contactname">Contactname</a>
+                    <input type="text" class="form-control form-control-sm" id="Contactname" placeholder="Enter contactname" value="@Model.ContactName" disabled>
+                </div>
+                <div class="form-group">
+                    <a for="Address">Address</a>
+                    <input type="text" class="form-control form-control-sm" id="Address" placeholder="Enter address" value="@Model.Address" disabled>
+                </div>
+                <div class="form-group">
+                    <a for="Zipcode">Zipcode</a>
+                    <input type="text" class="form-control form-control-sm" id="Zipcode" placeholder="Enter zipcode" value="@Model.Zipcode" disabled>
+                </div>
+                <div class="form-group">
+                    <a for="Place">Place</a>
+                    <input type="text" class="form-control form-control-sm" id="Place" placeholder="Enter place" value="@Model.Place" disabled>
+                </div>
+                <div class="form-group">
+                    <a for="Country">Country</a>
+                    <input type="text" class="form-control form-control-sm" id="Country" placeholder="Enter country" value="@Model.Country" disabled>
+                </div>
+                <div class="form-group">
+                    <a for="Phonenumber">Phonenumber</a>
+                    <input type="text" class="form-control form-control-sm" id="Phonenumber" placeholder="Enter phonenumber" value="@Model.PhoneNumber" disabled>
+                </div>
+                <div class="form-group">
+                    <a for="Email">Email</a>
+                    <input type="text" class="form-control form-control-sm" id="Email" placeholder="Enter email" value="@Model.Email" disabled>
+                </div>
+            </div>
+        </div><br />
+        <div class="col-md-12 text-center">
+            <button type="button" onclick="SubmitItem();" class="btn btn-info btn-lg">Add item</button>
+        </div>
+    </div>
+</form>
 
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    var ID = "@Model.ID";
+    function SubmitItem() {
+        var Companyname = document.getElementById("Companyname").value;
+        var KvK = document.getElementById("KvK").value;
+        var IBAN = document.getElementById("IBAN").value;
+        var VAT = document.getElementById("VAT").value;
+        var BANK = document.getElementById("Bank").value;
+        var BIC = document.getElementById("BIC").value;
+        var Contactname = document.getElementById("Contactname").value;
+        var Address = document.getElementById("Address").value;
+        var Zipcode = document.getElementById("Zipcode").value;
+        var Place = document.getElementById("Place").value;
+        var Country = document.getElementById("Country").value;
+        var Phone = document.getElementById("Phonenumber").value;
+        var Email = document.getElementById("Email").value;
+        var Note = document.getElementById("Note").value;
+        $.ajax({
+            type: "Post",
+            url: '/Reference/SaveReference',
+            data: {
+                'ID': ID,
+                'Companyname': Companyname,
+                'KvK': KvK,
+                'IBAN': IBAN,
+                'VAT': VAT,
+                'BANK': BANK,
+                'BIC': BIC,
+                'Contactname': Contactname,
+                'Address': Address,
+                'Zipcode': Zipcode,
+                'Place': Place,
+                'Country': Country,
+                'Phone': Phone,
+                'Email': Email,
+                'Note': Note
+            },
+            success: function () {
+                console.log("geslaagd!");
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function Enable() {
+        document.getElementById("Companyname").disabled = false;
+        document.getElementById("KvK").disabled = false;
+        document.getElementById("IBAN").disabled = false;
+        document.getElementById("VAT").disabled = false;
+        document.getElementById("Bank").disabled = false;
+        document.getElementById("BIC").disabled = false;
+        document.getElementById("Contactname").disabled = false;
+        document.getElementById("Address").disabled = false;
+        document.getElementById("Zipcode").disabled = false;
+        document.getElementById("Place").disabled = false;
+        document.getElementById("Country").disabled = false;
+        document.getElementById("Phonenumber").disabled = false;
+        document.getElementById("Email").disabled = false;
+        document.getElementById("Note").disabled = false;
+    }
+</script>
