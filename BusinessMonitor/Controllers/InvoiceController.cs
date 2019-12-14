@@ -47,17 +47,10 @@ namespace BusinessMonitor.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveInvoice(IFormCollection formCollection, OrderList order)
+        public IActionResult SaveInvoice(string newID, string itype, string[] orderlist, string referenceID, DateTime idate, DateTime pdate, string userID, string nstatus)
         {
-            var newInvoice = new InvoiceViewModel()
-            {
-                InvoiceNumber = formCollection["Invoicenumber"],
-                //InvoiceReference = _referenceLogic.GetReferenceByID(formCollection["ReferenceID"]),
-                InvoiceDate = Convert.ToDateTime(formCollection["CompanyName"]),
-                PayementDate = Convert.ToDateTime(formCollection["CompanyName"]),
-                InvoiceUser = _userLogic.GetUserInfo(formCollection["CompanyName"]),
-
-            };
+            var EditedInvoice = new Invoice(newID, referenceID, itype, userID, idate, pdate, Convert.ToBoolean(nstatus));
+            var a = orderlist;
             return View();
         }
 

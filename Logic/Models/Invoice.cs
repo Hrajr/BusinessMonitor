@@ -16,12 +16,19 @@ namespace Logic.Models
         public User InvoiceUser { get; set; }
         public bool PaymentStatus { get; set; } = false;
 
-        private Reference reference = new Reference();
-        private OrderList order = new OrderList();
-        private User user = new User();
-
         public Invoice()
         { }
+
+        public Invoice(string newIN, string referenceID, string itype, string userID, DateTime id, DateTime pd, bool newstatus)
+        {
+            InvoiceNumber = newIN;
+            TypeOfInvoice = (Invoicetype)System.Enum.Parse(typeof(Invoicetype), itype);
+            InvoiceReference = new Reference() { ID = referenceID };
+            InvoiceUser = new User() { ID = userID };
+            InvoiceDate = id;
+            PayementDate = pd;
+            PaymentStatus = newstatus;
+        }
 
         public Invoice(InvoiceDTO invoice)
         {
@@ -41,11 +48,11 @@ namespace Logic.Models
             {
                 InvoiceNumber = invoice.InvoiceNumber,
                 TypeOfInvoice = invoice.TypeOfInvoice,
-                InvoiceReference = reference.ConvertToDTO(invoice.InvoiceReference),
-                InvoiceOrder = order.ConvertToDTO(invoice.InvoiceOrder),
+                InvoiceReference = InvoiceReference.ConvertToDTO(invoice.InvoiceReference),
+                InvoiceOrder = InvoiceOrder.ConvertToDTO(invoice.InvoiceOrder),
                 InvoiceDate = invoice.InvoiceDate,
                 PaymentDate = invoice.PayementDate,
-                InvoiceUser = user.ConvertToDTO(invoice.InvoiceUser),
+                InvoiceUser = InvoiceUser.ConvertToDTO(invoice.InvoiceUser),
                 PaymentStatus = invoice.PaymentStatus
             };
             return returnedInvoice;

@@ -10,13 +10,13 @@
             <a class="btn btn-warning btn-xs" onclick="Enable()"><i class="fas fa-edit"></i></a>
         </h1>
         <small>Created by: @Model.InvoiceUser.Firstname, @Model.InvoiceUser.Lastname</small>
-    </center>
+    </center><br />
     <div class="row">
         <div class="col-md-4 order-md-2 mb-4">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
                 <label for="Reference">Select the reference:</label>
             </h4>
-            <select class="custom-select d-block w-100" id="References" name="References" asp-for="ListOfReferences" required>
+            <select class="custom-select d-block w-100" id="References" name="References" required disabled>
                 @foreach (var supplier in Model.ListOfReferences)
                 {
                     <option value="@supplier.ID">@supplier.CompanyName</option>
@@ -31,7 +31,12 @@
                         <small class="text-muted">Address 2: @Model.InvoiceReference.Place, @Model.InvoiceReference.Country</small><br />
                         <small class="text-muted">IBAN: @Model.InvoiceReference.IBAN</small><br />
                         <small class="text-muted">VAT: @Model.InvoiceReference.VAT</small><br />
-                        <small class="text-muted">Doubtfull: @if (Model.InvoiceReference.Doubtfull) {<i class="fas fa-check"></i> } else{<i class="fas fa-ban"></i>} </small><br />
+                        <small class="text-muted">
+                            Doubtfull: @if (Model.InvoiceReference.Doubtfull)
+                            {<i class="fas fa-check"></i> }
+                            else
+                            {<i class="fas fa-ban"></i>}
+                        </small><br />
                         <small class="text-muted">Note: @Model.InvoiceReference.Note</small>
                     </div>
                     <span class="text-muted">@Model.InvoiceReference.ID</span>
@@ -48,7 +53,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Debit</span>
                             </div>
-                            <input type="text" class="form-control" id="Invoicenumber" placeholder="Invoicenumber..." value="@Model.InvoiceNumber" required>
+                            <input type="text" class="form-control" id="Invoicenumber" placeholder="Invoicenumber..." value="@Model.InvoiceNumber" required disabled>
                             <div class="invalid-feedback">
                                 Valid invoicenumber is required.
                             </div>
@@ -56,12 +61,24 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="Invoicetype">Invoicetype:</label>
-                        <select class="custom-select d-block w-100" id="InvoiceType" onchange="CheckInvoiceType(this)" name="InvoiceType" asp-for="SingleInvoice.TypeOfInvoice" required>
+                        <select class="custom-select d-block w-100" id="InvoiceType" onchange="CheckInvoiceType(this)" name="InvoiceType" asp-for="SingleInvoice.TypeOfInvoice" required disabled>
                             @foreach (var InvType in Enum.GetNames(typeof(InvoiceViewModel.InvoiceType)))
                             {
                                 <option value="@InvType">@InvType</option>
                             }
                         </select><br />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Invoice date:</label>
+                        <div class="input-group">
+                            <input class="form-control" id="idate" name="date" placeholder="MM/DD/YYYY" type="text" disabled/>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Payment date:</label>
+                        <div class="input-group">
+                            <input class="form-control" id="pdate" name="date" placeholder="MM/DD/YYYY" type="text" disabled/>
+                        </div>
                     </div>
                 </div><br />
                 <div class="mb-3">
@@ -79,7 +96,7 @@
                                         <small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">@item.Description</small>
                                     </div>
                                     <div><h6 class="my-0">Amount name</h6><input id="amountof' @item.ItemID '" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" /></div>
-                                    <strong><a id="@item.ItemID" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong><span class="text-muted">@item.Price</span>
+                                    <strong><a id="Del'@item.ItemID'" onclick="DeleteItem(this)" class="text-danger" hidden>Delete</a></strong><span class="text-muted">@item.Price</span>
                                 </li>
                             }
                         </ul>
@@ -91,10 +108,11 @@
                 </div>
 
                 <div class="col-md-12 text-center">
-                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ItemContainer">Add item</button>
+                    <button id="ModalOpener" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ItemContainer" hidden>Add item</button>
                 </div>
-                <hr class="mb-4">
-                <button class="btn btn-primary btn-lg btn-block" type="submit">Save invoice</button>
+                <hr id="splitter" class="mb-4" hidden>
+                <button id="SaveBTN" onclick="SubmitInvoice()" class="btn btn-primary btn-lg btn-block" type="submit" hidden>Save invoice</button>
+                <button id="cancelBTN" onclick="Disable()" class="btn btn-outline-danger btn-sm btn-block" hidden>Cancel</button>
             </div>
         </div>
     </div>
@@ -129,41 +147,186 @@
     </div>
 </div>
 
-@*<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
-    var ID = "@Model.ItemID";
-    function SubmitItem() {
-        var Name = document.getElementById("ProductName").value;
-        var Desc = document.getElementById("ProductDescription").value;
-        var Price = document.getElementById("Price").value;
-        var VAT = document.getElementById("VAT").value;
-        var Amount = document.getElementById("Amount").value;
-        var Available = document.getElementById("Available").checked;
+    var startID = "";
+    function SubmitInvoice() {
+        var References = document.getElementById("References").value;
+        var Invoicenumber = document.getElementById("Invoicenumber").value;
+        var InvoiceType = document.getElementById("InvoiceType").value;
+        var Items = document.querySelectorAll("#AddedItems li[id]");
+        var idate = document.getElementById("idate").value;
+        var pdate = document.getElementById("pdate").value;
+        var istatus = true;
+        var userID = "@Model.InvoiceUser.ID";
+        var orderlist = [];
+        for (var i = 0; i < Items.length; i++) {
+            orderlist.push(Items[i].id);
+        }
+        console.log(Items[1].id);
         $.ajax({
             type: "Post",
-            url: '/Item/SaveItem',
+            url: '/Invoice/SaveInvoice',
             data: {
-                'ID': ID,
-                'Name': Name,
-                'Desc': Desc,
-                'Price': Price,
-                'VAT': VAT,
-                'Amount': Amount,
-                'Available': Available
+                'newID': Invoicenumber,
+                'itype': InvoiceType,
+                'orderlist': orderlist,
+                'referenceID': References,
+                'idate': idate,
+                'pdate': pdate,
+                'userID': userID,
+                'nstatus': istatus,
             },
             success: function () {
                 console.log("geslaagd!");
             }
         });
     }
-</script>
-<script type="text/javascript">
     function Enable() {
-        document.getElementById("ProductName").disabled = false;
-        document.getElementById("ProductDescription").disabled = false;
-        document.getElementById("Price").disabled = false;
-        document.getElementById("VAT").disabled = false;
-        document.getElementById("Amount").disabled = false;
-        document.getElementById("Available").disabled = false;
+        startID = "@Model.InvoiceNumber";
+        document.getElementById("References").disabled = false;
+        document.getElementById("Invoicenumber").disabled = false;
+        document.getElementById("InvoiceType").disabled = false;
+        document.getElementById("idate").disabled = false;
+        document.getElementById("pdate").disabled = false;
+        document.getElementById("ModalOpener").hidden = false;
+        document.getElementById("SaveBTN").hidden = false;
+        document.getElementById("splitter").hidden = false;
+        document.getElementById("cancelBTN").hidden = false;
+        @foreach (var item in Model.InvoiceOrder.OrderItem)
+        {
+            <Text>
+        document.getElementById("Del'@item.ItemID'").hidden = false;
+            </text>
+        }
     }
-</script>*@
+    function Disable() {
+        document.getElementById("References").disabled = true;
+        document.getElementById("Invoicenumber").disabled = true;
+        document.getElementById("InvoiceType").disabled = true;
+        document.getElementById("idate").disabled = true;
+        document.getElementById("pdate").disabled = true;
+        document.getElementById("ModalOpener").hidden = true;
+        document.getElementById("SaveBTN").hidden = true;
+        document.getElementById("splitter").hidden = true;
+        document.getElementById("cancelBTN").hidden = true;
+        @foreach (var item in Model.InvoiceOrder.OrderItem)
+        {
+            <Text>
+        document.getElementById("Del'@item.ItemID'").hidden = true;
+            </text>
+        }
+    }
+    var AllItems = [];
+    var returnItems = [];
+    var parsed = "";
+    function AddItem() {
+        var e = document.getElementById("NewItem");
+        _id = e.options[e.selectedIndex].value;
+        var checkid = _id.split(":")[0];
+        var name = _id.split(":")[3];
+        var desc = _id.split(":")[2];
+        var price = _id.split(":")[1];
+        console.log(returnItems.length);
+        console.log(returnItems.length == 0);
+        if (returnItems.length == 0) {
+            console.log("Halooo");
+            returnItems.push(_id.split(":"));
+            PrintDIV(checkid, name, desc, price, true);
+        }
+        else {
+            IsAllreadyAdded(checkid, name, desc, price);
+        }
+    };
+    function IsAllreadyAdded(ID, Name, Desc, Price) {
+        returnItems.forEach(function (item, index) {
+            if (item[0] == ID) {
+                console.log("werkt");
+                AddAmount(ID);
+            }
+            else {
+                PrintDIV(ID, Name, Desc, Price, true);
+            }
+        });
+    }
+    function PrintDIV(ID, Name, Description, Price, Add) {
+        if (Add) {
+            var div = '<li id="' + ID + '" class="list-group-item d-flex justify-content-between lh-condensed"><div><h6 class="my-0">' + Name + '</h6><small class="text-muted" style="max-width:10em; display: inline-grid; word-wrap: break-word;">' + Description + '</small></div ><div><h6 class="my-0">Amount name</h6><input id="amountof' + ID + '" class="form-control form-control-sm" type="number" value="1" min="0" max="1000" step="1" style="margin-top:10px;" /></div><strong><a id="' + ID + '" onclick="DeleteItem(this)" class="text-danger">Delete</a></strong><span class="text-muted">' + Price + '</span></li >';
+            document.getElementById("AddedItems").innerHTML += div;
+        }
+        else {
+            document.getElementById(ID).remove();
+        }
+    }
+    function AddAmount(ID) {
+        var currentDIV = document.getElementById("amountof" + ID);
+        var currentAmount = parseInt(document.getElementById("amountof" + ID).value);
+        console.log(currentDIV.value = currentAmount + 1);
+        currentDIV.value = currentAmount + 1;
+    }
+    function EnableButton() {
+        var a = document.getElementById("btnAddItem");
+        a.disabled = false;
+    };
+    function DisableButton() {
+        var a = document.getElementById("btnAddItem");
+        a.disabled = true;
+    };
+    function CheckInvoiceType(nameSelect) {
+        if (nameSelect) {
+            SelectedType = document.getElementById("InvoiceType");
+            var SelectedOption = SelectedType.options[SelectedType.selectedIndex].value;
+            console.log(SelectedOption);
+
+            if (SelectedOption == "Sale") {
+                document.getElementById("Sale").style.display = "block";
+                document.getElementById("Purchase").style.display = "none";
+                document.getElementById("CR").style.display = "none";
+            }
+            else if (SelectedOption == "CreditNote") {
+                document.getElementById("Sale").style.display = "none";
+                document.getElementById("Purchase").style.display = "none";
+                document.getElementById("CR").style.display = "block";
+            }
+            else if (SelectedOption == "Purchase") {
+                document.getElementById("Sale").style.display = "none";
+                document.getElementById("Purchase").style.display = "block";
+                document.getElementById("CR").style.display = "none";
+            }
+            else {
+                document.getElementById("Sale").style.display = "none";
+                document.getElementById("CR").style.display = "none";
+            }
+        }
+        else {
+            document.getElementById("Sale").style.display = "none";
+            document.getElementById("CR").style.display = "none";
+        }
+    }
+</script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#AddItem").click(function () {
+                $("#ItemContainer").modal("hide");
+            });
+
+            $("#ItemContainer").on('hide.bs.modal', function () {
+                DisableButton();
+            });
+        });
+    </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+<script>
+    $(document).ready(function () {
+        var date_input = $('input[name="date"]');
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    })
+</script>
