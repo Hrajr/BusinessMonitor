@@ -7,20 +7,19 @@ using Logic;
 using Logic.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace BusinessMonitor.Controllers
 {
     public class InvoiceController : Controller
     {
         private readonly InvoiceLogic _invoiceLogic;
-        private readonly ReferenceLogic _referenceLogic;
-        private readonly UserLogic _userLogic;
-        private readonly OrderList _orderlist;
         private InvoiceViewModel model = new InvoiceViewModel();
+
         public InvoiceController()
         {
             _invoiceLogic = new InvoiceLogic();
-            _referenceLogic = new ReferenceLogic();
         }
 
         [HttpGet]
@@ -47,10 +46,15 @@ namespace BusinessMonitor.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveInvoice(string newID, string itype, string[] orderlist, string referenceID, DateTime idate, DateTime pdate, string userID, string nstatus)
+        public IActionResult SaveInvoice(string ID, string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string userID, string paymentStatus)
         {
-            var EditedInvoice = new Invoice(newID, referenceID, itype, userID, idate, pdate, Convert.ToBoolean(nstatus));
-            var a = orderlist;
+            var deserializedOrderlist = new List<OrderViewModel>();
+            foreach (var item in orderlist)
+            {
+                var deserializedItem = JsonConvert.DeserializeObject<OrderViewModel>(item);
+                deserializedOrderlist.Add(deserializedItem);
+            }
+            var collectedInformation = new Invoice(ID, referenceID, invoiceType, userID, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
             return View();
         }
 

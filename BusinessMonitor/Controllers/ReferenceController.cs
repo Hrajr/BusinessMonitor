@@ -111,7 +111,7 @@ namespace BusinessMonitor.Controllers
                 VAT = "VATnum",
                 PhoneNumber = "TestPhone",
                 Email = "TestEmail",
-                Doubtfull = true,
+                Doubtfull = false,
                 Note = "He didn't payed for 3 years!"
             };
             return View("EditReference", item);
