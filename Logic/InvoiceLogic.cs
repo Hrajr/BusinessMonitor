@@ -19,7 +19,7 @@ namespace Logic
             _refContext = new ReferenceContext();
         }
 
-        public bool AddInvoice(Invoice invoice, string referenceID, OrderList order)
+        public bool AddInvoice(Invoice invoice)
         {
             //OrderList InvoiceOrder = order;
             //Reference InvoiceReference = new Reference(_refContext.GetReferenceByID(referenceID));

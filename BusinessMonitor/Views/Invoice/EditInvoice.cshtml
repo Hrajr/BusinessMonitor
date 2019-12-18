@@ -157,7 +157,7 @@
         var Items = document.querySelectorAll("#AddedItems li[id]");
         var idate = document.getElementById("idate").value;
         var pdate = document.getElementById("pdate").value;
-        var istatus = true;
+        var istatus = document.getElementById("Available").checked; /* TODO !!!!!!!!!!!!!!!!!!!!!!! */
         var userID = "@Model.InvoiceUser.ID";
         var orderlist = [] ;
         for (var i = 0; i < Items.length; i++) {
@@ -187,7 +187,7 @@
                 'paymentStatus': istatus,
             },
             success: function () {
-                console.log("geslaagd!");
+                console.log("Invoice saved!");
             }
         });
     }

@@ -1,4 +1,5 @@
 ﻿using DAL.Interface.DTO;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,15 +20,26 @@ namespace Logic.Models
         public Invoice()
         { }
 
-        public Invoice(string newIN, string referenceID, string itype, string userID, DateTime id, DateTime pd, bool newstatus)
+        public Invoice(string referenceID, string[] orderList, string invoiceType, DateTime invoiceDate, DateTime paymentDate, bool paymentStatus)
         {
-            InvoiceNumber = newIN;
-            TypeOfInvoice = (Invoicetype)System.Enum.Parse(typeof(Invoicetype), itype);
+            TypeOfInvoice = (Invoicetype)System.Enum.Parse(typeof(Invoicetype), invoiceType);
             InvoiceReference = new Reference() { ID = referenceID };
+            InvoiceOrder = new OrderList() { OrderItem = fillOrderlist(orderList) };
+            InvoiceDate = invoiceDate;
+            PayementDate = paymentDate;
+            PaymentStatus = paymentStatus;
+        }
+
+        public Invoice(string invoiceNumber, string referenceID, string[] orderList, string invoiceType, string userID, DateTime invoiceDate, DateTime paymentDate, bool paymentStatus)
+        {
+            InvoiceNumber = invoiceNumber;
+            TypeOfInvoice = (Invoicetype)System.Enum.Parse(typeof(Invoicetype), invoiceType);
+            InvoiceReference = new Reference() { ID = referenceID };
+            InvoiceOrder = new OrderList() { OrderItem = fillOrderlist(orderList) };
             InvoiceUser = new User() { ID = userID };
-            InvoiceDate = id;
-            PayementDate = pd;
-            PaymentStatus = newstatus;
+            InvoiceDate = invoiceDate;
+            PayementDate = paymentDate;
+            PaymentStatus = paymentStatus;
         }
 
         public Invoice(InvoiceDTO invoice)
@@ -56,6 +68,17 @@ namespace Logic.Models
                 PaymentStatus = invoice.PaymentStatus
             };
             return returnedInvoice;
+        }
+
+        private List<Item> fillOrderlist(string[] order)
+        {
+            var deserializedOrderlist = new List<Item>();
+            foreach (var item in order)
+            {
+                var deserializedItem = JsonConvert.DeserializeObject<Item>(item);
+                deserializedOrderlist.Add(deserializedItem);
+            }
+            return deserializedOrderlist;
         }
     }
 }

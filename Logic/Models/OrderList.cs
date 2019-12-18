@@ -14,6 +14,11 @@ namespace Logic.Models
         public OrderList()
         { }
 
+        public OrderList(List<Item> list)
+        {
+            OrderItem = list;
+        }
+
         public OrderList(OrderlistDTO order)
         {
             OrderID = order.OrderID;

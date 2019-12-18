@@ -14,12 +14,12 @@ namespace BusinessMonitor.Controllers
 {
     public class InvoiceController : Controller
     {
-        private readonly InvoiceLogic _invoiceLogic;
+        private readonly InvoiceLogic logic;
         private InvoiceViewModel model = new InvoiceViewModel();
 
         public InvoiceController()
         {
-            _invoiceLogic = new InvoiceLogic();
+            logic = new InvoiceLogic();
         }
 
         [HttpGet]
@@ -29,7 +29,7 @@ namespace BusinessMonitor.Controllers
             //var allInvoices = _invoiceLogic.GetInvoice();
             //model.ListOfInvoices.AddRange(allInvoices);
             //return View(model);
-            var a = _invoiceLogic.GetInvoice();
+            var a = logic.GetInvoice();
             var allInvoices = new InvoiceViewModel();
             allInvoices.ListOfInvoices = a;
             return View(allInvoices);
@@ -48,50 +48,23 @@ namespace BusinessMonitor.Controllers
         [HttpPost]
         public IActionResult SaveInvoice(string id, string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string userID, string paymentStatus)
         {
-            var deserializedOrderlist = new List<OrderViewModel>();
-            foreach (var item in orderlist)
-            {
-                var deserializedItem = JsonConvert.DeserializeObject<OrderViewModel>(item);
-                deserializedOrderlist.Add(deserializedItem);
-            }
-            var collectedInformation = new Invoice(id, referenceID, invoiceType, userID, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
+            var collectedInformation = new Invoice(id, referenceID, orderlist, invoiceType, userID, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
+            logic.EditInvoice(collectedInformation);
             return View();
         }
 
         [HttpPost]
-        [Route("SubmitInvoice")]
-        public IActionResult SubmitInvoice(IFormCollection formCollection)
+        public IActionResult SubmitInvoice(string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string paymentStatus)
         {
-            if (!ModelState.IsValid)
-            { return View("AddInvoice"); }
-            var newInvoice = new InvoiceViewModel
-            {
-                //CompanyName = formCollection["CompanyName"],
-                //ContactName = formCollection["ContactName"],
-                //Address = formCollection["Address"],
-                //Zipcode = formCollection["Zipcode"],
-                //Place = formCollection["Place"],
-                //Country = formCollection["Country"],
-                //PhoneNumber = formCollection["PhoneNumber"],
-                //Email = formCollection["Email"],
-                //Bank = formCollection["Bank"],
-                //BIC = formCollection["BIC"],
-                //IBAN = formCollection["IBAN"],
-                //KvK = formCollection["KvK"],
-                //VAT = formCollection["VAT"],
-                //Doubtfull = Convert.ToBoolean(formCollection["Doubtfull"]),
-                //Date = DateTime.Now,
-                //Note = formCollection["Note"],
-            };
-            //if (_invoiceLogic.AddInvoice(newInvoice))
-            //{ return View("AddInvoice"); }
+            var collectedNewInformation = new Invoice(referenceID, orderlist, invoiceType, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
+            logic.AddInvoice(collectedNewInformation);
             return View("Invoice");
         }
 
         [HttpPost]
         public IActionResult RemoveInvoice(string id)
         {
-            _invoiceLogic.RemoveInvoice(id);
+            logic.RemoveInvoice(id);
             return RedirectToAction("Invoice");
         }
 
@@ -99,7 +72,7 @@ namespace BusinessMonitor.Controllers
         [Route("OpenInvoice")]
         public IActionResult OpenInvoice(string id)
         {
-            model.SingleInvoice = _invoiceLogic.GetInvoiceByID(id);
+            model.SingleInvoice = logic.GetInvoiceByID(id);
             return View("OpenInvoice", model);
         }
 
