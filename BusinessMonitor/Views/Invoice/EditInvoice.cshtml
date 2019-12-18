@@ -177,14 +177,14 @@
             url: '/Invoice/SaveInvoice',
             traditional: true,
             data: {
-                'newID': Invoicenumber,
-                'itype': InvoiceType,
+                'id': Invoicenumber,
+                'invoiceType': InvoiceType,
                 'orderlist': orderlist,
                 'referenceID': References,
-                'idate': idate,
-                'pdate': pdate,
+                'invoiceDate': idate,
+                'paymentDate': pdate,
                 'userID': userID,
-                'nstatus': istatus,
+                'paymentStatus': istatus,
             },
             success: function () {
                 console.log("geslaagd!");

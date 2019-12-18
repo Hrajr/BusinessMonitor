@@ -46,7 +46,7 @@ namespace BusinessMonitor.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveInvoice(string ID, string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string userID, string paymentStatus)
+        public IActionResult SaveInvoice(string id, string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string userID, string paymentStatus)
         {
             var deserializedOrderlist = new List<OrderViewModel>();
             foreach (var item in orderlist)
@@ -54,7 +54,7 @@ namespace BusinessMonitor.Controllers
                 var deserializedItem = JsonConvert.DeserializeObject<OrderViewModel>(item);
                 deserializedOrderlist.Add(deserializedItem);
             }
-            var collectedInformation = new Invoice(ID, referenceID, invoiceType, userID, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
+            var collectedInformation = new Invoice(id, referenceID, invoiceType, userID, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
             return View();
         }
 
