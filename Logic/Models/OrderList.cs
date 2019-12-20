@@ -1,4 +1,6 @@
-﻿using DAL.Interface.DTO;
+﻿using DAL.Interface;
+using DAL.Interface.DTO;
+using DAL.SQLcontext;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,12 +9,14 @@ namespace Logic.Models
 {
     public class OrderList
     {
+        private readonly iOrderlist _context;
         public string OrderID { get; set; }
         public List<Item> OrderItem { get; set; }
-        public int Amount { get; set; }
 
         public OrderList()
-        { }
+        {
+            _context = new OrderlistContext();
+        }
 
         public OrderList(List<Item> list)
         {
@@ -23,7 +27,6 @@ namespace Logic.Models
         {
             OrderID = order.OrderID;
             OrderItem = order.OrderItem.ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
-            Amount = order.Amount;
         }
 
         public OrderlistDTO ConvertToDTO(OrderList order)
@@ -31,8 +34,7 @@ namespace Logic.Models
             var returnedOrder = new OrderlistDTO()
             {
                 OrderID = order.OrderID,
-                OrderItem = order.OrderItem.ConvertAll(x => new ItemDTO { ItemID = x.ItemID, Price = x.Price, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT }),
-                Amount = order.Amount
+                OrderItem = order.OrderItem.ConvertAll(x => new ItemDTO { ItemID = x.ItemID, Price = x.Price, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT })
             };
             return returnedOrder;
         }
@@ -47,6 +49,11 @@ namespace Logic.Models
         {
             OrderItem.AddRange(items);
             return true;
+        }
+
+        public OrderList GetOrderByID(string ID)
+        {
+            return new OrderList(_context.GetOrderByID(ID));
         }
     }
 }

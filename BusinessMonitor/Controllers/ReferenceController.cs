@@ -23,7 +23,7 @@ namespace BusinessMonitor.Controllers
         [Route("Reference")]
         public IActionResult Reference()
         {
-            var allReferences = _referenceLogic.GetReference();
+            var allReferences = GetAllReference();
             model.ListOfReferences = allReferences;
             return View(model);
         }
@@ -122,6 +122,11 @@ namespace BusinessMonitor.Controllers
         {
             _referenceLogic.RemoveReference(id);
             return View("Reference");
+        }
+
+        public List<Reference> GetAllReference()
+        {
+            return _referenceLogic.GetReference();
         }
     }
 }

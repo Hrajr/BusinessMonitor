@@ -1,4 +1,5 @@
 ﻿using DAL.Interface;
+using DAL.SQLcontext;
 using Logic.Encryption;
 using Logic.Hasher;
 using Logic.Models;
@@ -12,9 +13,9 @@ namespace Logic
         private static readonly Hash Hashing = new Hash();
         private static readonly Encryptor Crypto = new Encryptor();
 
-        public UserLogic(iUser context)
+        public UserLogic()
         {
-            _context = context;
+            _context = new UserContext();
         }
 
         public bool Login(User user)

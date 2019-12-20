@@ -10,19 +10,22 @@ namespace Logic
 {
     public class InvoiceLogic
     {
-        internal readonly iInvoice _context;
-        internal readonly iReference _refContext;
+        private readonly iInvoice _context;
+        private readonly ReferenceLogic _referenceLogic;
+        private readonly UserLogic _userLogic;
+        private readonly OrderList _orderlistLogic;
 
         public InvoiceLogic()
         {
             _context = new InvoiceContext();
-            _refContext = new ReferenceContext();
+            _referenceLogic = new ReferenceLogic();
+            _userLogic = new UserLogic();
+            _orderlistLogic = new OrderList();
         }
 
         public bool AddInvoice(Invoice invoice)
         {
-            //OrderList InvoiceOrder = order;
-            //Reference InvoiceReference = new Reference(_refContext.GetReferenceByID(referenceID));
+            invoice.InvoiceReference = _referenceLogic.GetReferenceByID(invoice.InvoiceReference.ID);
             return _context.AddInvoice(invoice.ConvertToDTO(invoice));
         }
 
@@ -33,27 +36,22 @@ namespace Logic
 
         public bool EditInvoice(Invoice invoice)
         {
+            invoice.InvoiceReference = _referenceLogic.GetReferenceByID(invoice.InvoiceReference.ID);
             return _context.EditInvoice(invoice.ConvertToDTO(invoice));
         }
 
         public List<Invoice> GetInvoice()
         {
-            var a = new List<Invoice>
-            {
-                new Invoice(new MockInvoice().InvoiceMock),
-                new Invoice(new MockInvoice().InvoiceMock1),
-                new Invoice(new MockInvoice().InvoiceMock2),
-                new Invoice(new MockInvoice().InvoiceMock3)
-            };
-            return a;
-            //return _context.GetInvoice().ConvertAll(x => new Invoice { InvoiceNumber = x.InvoiceNumber, TypeOfInvoice = x.TypeOfInvoice, InvoiceReference = new Reference(x.InvoiceReference), InvoiceOrder = new OrderList(x.InvoiceOrder), InvoiceUser = new User(x.InvoiceUser), InvoiceDate = x.InvoiceDate, PayementDate = x.InvoiceDate, PaymentStatus = x.PaymentStatus });
+            return _context.GetInvoice().ConvertAll(x => new Invoice { InvoiceNumber = x.InvoiceNumber, TypeOfInvoice = x.TypeOfInvoice, InvoiceReference = new Reference(x.InvoiceReference), InvoiceOrder = new OrderList(x.InvoiceOrder), InvoiceUser = new User(x.InvoiceUser), InvoiceDate = x.InvoiceDate, PayementDate = x.InvoiceDate, PaymentStatus = x.PaymentStatus });
         }
 
         public Invoice GetInvoiceByID(string id)
         {
-            var returnedInvoice = _context.GetInvoiceByID(id);
-            var correspondingRef = _refContext.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
-            return new Invoice(_context.GetInvoiceByID(id));
+            var returnedInvoice = new Invoice(_context.GetInvoiceByID(id));
+            returnedInvoice.InvoiceReference = _referenceLogic.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
+            returnedInvoice.InvoiceUser = _userLogic.GetUserByID(returnedInvoice.InvoiceUser.ID);
+            returnedInvoice.InvoiceOrder = _orderlistLogic.GetOrderByID(returnedInvoice.InvoiceOrder.OrderID);
+            return returnedInvoice;
         }
     }
 }
