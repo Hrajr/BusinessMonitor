@@ -14,6 +14,7 @@ namespace BusinessMonitor.Controllers
     {
         private readonly ReferenceLogic _referenceLogic;
         private ReferenceViewModel model = new ReferenceViewModel();
+
         public ReferenceController()
         {
             _referenceLogic = new ReferenceLogic();
@@ -23,8 +24,7 @@ namespace BusinessMonitor.Controllers
         [Route("Reference")]
         public IActionResult Reference()
         {
-            var allReferences = GetAllReference();
-            model.ListOfReferences = allReferences;
+            model.ListOfReferences = GetAllReference();
             return View(model);
         }
 

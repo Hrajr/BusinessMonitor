@@ -34,15 +34,7 @@ namespace Logic
 
         public List<Reference> GetReference()
         {
-            var mock = new MockReference();
-            var a = new List<Reference>()
-            {
-                new Reference(mock.ReferenceMock),
-                new Reference(mock.ReferenceMock2),
-                new Reference(mock.ReferenceMock3)
-            };
-            return a;
-            //return _context.GetReference().ConvertAll(x => new Reference { ID = x.ID, CompanyName = x.CompanyName, ContactName = x.ContactName, Address = x.Address, Zipcode = x.Zipcode, Place = x.Place, Country = x.Country, PhoneNumber = x.PhoneNumber, Email = x.Email, Bank = x.Bank, BIC = x.BIC, IBAN = x.IBAN, KvK = x.KvK, VAT = x.VAT, Doubtfull = x.Doubtfull, Date = x.Date, Note = x.Note });
+            return _context.GetReference().ConvertAll(x => new Reference { ID = x.ID, CompanyName = x.CompanyName, ContactName = x.ContactName, Address = x.Address, Zipcode = x.Zipcode, Place = x.Place, Country = x.Country, PhoneNumber = x.PhoneNumber, Email = x.Email, Bank = x.Bank, BIC = x.BIC, IBAN = x.IBAN, KvK = x.KvK, VAT = x.VAT, Doubtfull = x.Doubtfull, Date = x.Date, Note = x.Note });
         }
 
         public Reference GetReferenceByID(string id)

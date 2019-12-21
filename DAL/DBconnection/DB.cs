@@ -8,6 +8,12 @@ namespace DAL.DBconnection
     public class DB
     {
         public SqlConnection con;
+        public string connection;
+
+        public DB()
+        {
+            connection = "Server=mssql.fhict.local;Database=dbi424119_y;User Id = dbi424119_y; Password=Hrajr123;";
+        }
 
         //public DB()
         //{

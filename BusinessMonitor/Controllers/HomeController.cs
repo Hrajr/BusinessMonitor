@@ -16,9 +16,9 @@ namespace BusinessMonitor.Controllers
     {
         private readonly UserLogic _userLogic;
 
-        public HomeController(iUser context)
+        public HomeController()
         {
-            _userLogic = new UserLogic(context);
+            _userLogic = new UserLogic();
         }
 
         public IActionResult Index()

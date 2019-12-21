@@ -38,20 +38,7 @@ namespace Logic
 
         public List<Item> GetItem()
         {
-            var mock = new MockItem();
-                var a = new List<Item>
-            {
-                new Item(mock.ItemsMock[0]),
-                new Item(mock.ItemsMock[1]),
-                new Item(mock.ItemsMock[2]),
-                new Item(mock.ItemsMock[3]),
-                new Item(mock.ItemsMock[4]),
-                new Item(mock.ItemsMock[5]),
-                new Item(mock.ItemsMock[6])
-            };
-            return a;
-                //return _context.GetInvoice().ConvertAll(x => new Invoice { InvoiceNumber = x.InvoiceNumber, TypeOfInvoice = x.TypeOfInvoice, InvoiceReference = new Reference(x.InvoiceReference), InvoiceOrder = new OrderList(x.InvoiceOrder), InvoiceUser = new User(x.InvoiceUser), InvoiceDate = x.InvoiceDate, PayementDate = x.InvoiceDate, PaymentStatus = x.PaymentStatus });
-             //return _context.GetItem().ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
+            return _context.GetItem().ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
         }
 
         public Item GetItemByID(string id)
