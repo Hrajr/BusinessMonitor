@@ -10,14 +10,14 @@ namespace DAL.Interface.DTO
         public string ProductName { get; set; }
         public string Description { get; set; }
         public int VAT { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public int Amount { get; set; }
         public bool InStock { get; set; }
 
         public ItemDTO()
         { }
 
-        public ItemDTO(string itemID, string productName, string description, int vat, double price, int amount, bool instock)
+        public ItemDTO(string itemID, string productName, string description, int vat, decimal price, int amount, bool instock)
         {
             ItemID = itemID;
             ProductName = productName;

@@ -16,7 +16,7 @@ namespace DAL.SQLcontext
         public bool AddReference(ReferenceDTO reference)
         {
             bool Success = false;
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -64,7 +64,7 @@ namespace DAL.SQLcontext
         public bool EditReference(ReferenceDTO reference)
         {
             bool Success = false;
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -113,7 +113,7 @@ namespace DAL.SQLcontext
         public List<ReferenceDTO> GetReference()
         {
             List<ReferenceDTO> CollectedReferences = new List<ReferenceDTO>();
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -161,7 +161,7 @@ namespace DAL.SQLcontext
         public ReferenceDTO GetReferenceByID(string id)
         {
             var reference = new ReferenceDTO();
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -205,7 +205,7 @@ namespace DAL.SQLcontext
         public bool RemoveReference(string id)
         {
             bool Success = false;
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {

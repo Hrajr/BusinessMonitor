@@ -17,7 +17,7 @@ namespace DAL.SQLcontext
         {
             bool isAdmin = false;
 
-            using (SqlConnection conn = new SqlConnection(Data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(Data.connection))
             {
                 try
                 {
@@ -44,9 +44,9 @@ namespace DAL.SQLcontext
 
         public UserDTO GetUserInfo(string id)
         {
-            var user = new UserDTO();
+            var collectedUser = new UserDTO();
 
-            using (SqlConnection conn = new SqlConnection(Data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(Data.connection))
             {
                 try
                 {
@@ -60,14 +60,14 @@ namespace DAL.SQLcontext
 
                     while (reader.Read())
                     {
-                        user.Username = reader["Username"].ToString();
-                        user.Firstname = reader["Firstname"].ToString();
-                        user.Lastname = reader["Lastname"].ToString();
-                        user.Address = reader["Address"].ToString();
-                        user.Zipcode = reader["Zipcode"].ToString();
-                        user.Place = reader["Place"].ToString();
-                        user.Phone = reader["Phone"].ToString();
-                        user.Email = reader["Email"].ToString();
+                        collectedUser.Username = reader["Username"].ToString();
+                        collectedUser.Firstname = reader["Firstname"].ToString();
+                        collectedUser.Lastname = reader["Lastname"].ToString();
+                        collectedUser.Address = reader["Address"].ToString();
+                        collectedUser.Zipcode = reader["Zipcode"].ToString();
+                        collectedUser.Place = reader["Place"].ToString();
+                        collectedUser.Phone = reader["Phone"].ToString();
+                        collectedUser.Email = reader["Email"].ToString();
                     }
                     reader.Close();
                 }
@@ -76,7 +76,7 @@ namespace DAL.SQLcontext
                     conn.Close();
                 }
             }
-            return user;
+            return collectedUser;
         }
 
         public UserDTO Login(UserDTO user)

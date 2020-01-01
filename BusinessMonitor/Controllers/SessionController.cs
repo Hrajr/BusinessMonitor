@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BusinessMonitor.Models;
 using DAL.Interface;
 using Logic;
 using Logic.Models;
@@ -17,9 +18,9 @@ namespace BusinessMonitor.Controllers
     {
         private readonly UserLogic _userLogic;
 
-        public SessionController(iUser context)
+        public SessionController()
         {
-            _userLogic = new UserLogic(context);
+            _userLogic = new UserLogic();
         }
 
         [Route("Login")]
@@ -27,26 +28,21 @@ namespace BusinessMonitor.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
-            return User.Identity.IsAuthenticated ? View("Profile") : View("Login");
+            return User.Identity.IsAuthenticated ? View("Profile") : View("Signin");
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult LoginSubmit([Bind("Password, Username")] User user)
+        public IActionResult LoginSubmit([Bind("Password, Username")] LoginViewModel user)
         {
             if (!ModelState.IsValid)
             {
                 return View("Login");
             }
 
-            if (_userLogic.Login(user))
+            if (_userLogic.Login(new User() { Username = user.Username, Password = user.Password }))
             {
-                InitUser(user);
-                if (_userLogic.AdminCheck(user))
-                {
-                    return RedirectToAction("AdminPage", "Home");
-                }
-                return RedirectToAction("Profile", "Home");
+                //InitUser(user);
             }
             return View();
         }
@@ -62,9 +58,9 @@ namespace BusinessMonitor.Controllers
             await this.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
-        private async void InitUser(User user)
+        private async void InitUser(LoginViewModel user)
         {
-            user.Admin = _userLogic.AdminCheck(user);
+            user.Admin = _userLogic.AdminCheck(new User() { ID = User.Identity.Name } );
             var claims = new List<Claim>
             { new Claim(ClaimTypes.Name, user.ID) };
             if (user.Admin)

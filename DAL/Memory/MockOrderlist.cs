@@ -11,7 +11,6 @@ namespace DAL.Memory
         public OrderlistDTO OrderListMock = new OrderlistDTO
         {
             OrderID = "1",
-            Amount = 2,
             OrderItem = Testing.ItemsMock
         };
     }

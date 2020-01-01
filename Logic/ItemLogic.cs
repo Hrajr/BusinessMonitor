@@ -31,14 +31,9 @@ namespace Logic
             return _context.EditItem(item.ConvertToDTO(item));
         }
 
-        public bool OpenItem(string id)
-        {
-            return _context.OpenItem(id);
-        }
-
         public List<Item> GetItem()
         {
-            return _context.GetItem().ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
+            return _context.GetItem().ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, ProductName = x.ProductName, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
         }
 
         public Item GetItemByID(string id)

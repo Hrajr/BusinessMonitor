@@ -129,12 +129,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="exampleFormControlSelect2">Example multiple select</label>
-                        <select multiple class="form-control" id="NewItem" onchange="EnableButton()" asp-for="items">
+                        @*<select multiple class="form-control" id="NewItem" onchange="EnableButton()" asp-for="items">
                             @foreach (var items in Model.items)
                             {
                                 <option value="@items.ItemID:@items.Price:@items.Description:@items.ProductName">@items.ProductName</option>
                             }
-                        </select>
+                        </select>*@
                     </div>
                 </div>
                 <div class="modal-footer">

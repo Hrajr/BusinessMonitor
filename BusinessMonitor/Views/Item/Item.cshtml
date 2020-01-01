@@ -77,16 +77,8 @@
             data: {
                 'id': ID,
             },
-            success: function () { location.reload(); }
+            success: function () { alert("Item" + ID + " has been deleted!"); }
         });
+        location.reload();
     }
-    //function EditItem(ID) {
-    //    $.ajax({
-    //        type: "Post",
-    //        url: '/Item/EditItem',
-    //        data: {
-    //            'id': ID,
-    //        }
-    //    });
-    //}
 </script>

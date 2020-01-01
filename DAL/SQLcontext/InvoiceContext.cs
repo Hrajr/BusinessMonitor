@@ -16,7 +16,7 @@ namespace DAL.SQLcontext
         public bool AddInvoice(InvoiceDTO invoice)
         {
             bool Success = false;
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -49,7 +49,7 @@ namespace DAL.SQLcontext
         public bool EditInvoice(InvoiceDTO invoice)
         {
             bool Success = false;
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -82,7 +82,7 @@ namespace DAL.SQLcontext
         public List<InvoiceDTO> GetInvoice()
         {
             List<InvoiceDTO> CollectedReferences = new List<InvoiceDTO>();
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -130,7 +130,7 @@ namespace DAL.SQLcontext
         public InvoiceDTO GetInvoiceByID(string id)
         {
             var invoice = new InvoiceDTO();
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -174,7 +174,7 @@ namespace DAL.SQLcontext
         public bool RemoveInvoice(string id)
         {
             bool Success = false;
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {

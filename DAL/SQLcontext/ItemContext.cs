@@ -16,14 +16,15 @@ namespace DAL.SQLcontext
         public bool AddItem(ItemDTO item)
         {
             bool Success = false;
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
                     conn.Open();
 
-                    SqlCommand command = new SqlCommand("AddReference", conn);
+                    SqlCommand command = new SqlCommand("AddItem", conn);
                     command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@Name", item.ProductName));
                     command.Parameters.Add(new SqlParameter("@Description", item.Description));
                     command.Parameters.Add(new SqlParameter("@VAT", item.VAT));
                     command.Parameters.Add(new SqlParameter("@Price", item.Price));
@@ -53,7 +54,7 @@ namespace DAL.SQLcontext
         public List<ItemDTO> GetItem()
         {
             List<ItemDTO> CollectedItems = new List<ItemDTO>();
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -69,9 +70,10 @@ namespace DAL.SQLcontext
                         var item = new ItemDTO
                         {
                             ItemID = reader["ID"].ToString(),
+                            ProductName = reader["Name"].ToString(),
                             Description = reader["Description"].ToString(),
                             VAT = (int)reader["VAT"],
-                            Price = Convert.ToDouble(reader["Price"]),
+                            Price = Convert.ToDecimal(reader["Price"]),
                             Amount = (int)reader["Amount"],
                             InStock = (bool)reader["InStock"]
                         };
@@ -93,7 +95,7 @@ namespace DAL.SQLcontext
             {
                 ItemID = id
             };
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -107,9 +109,10 @@ namespace DAL.SQLcontext
 
                     while (reader.Read())
                     {
+                        item.ProductName = reader["Name"].ToString();
                         item.Description = reader["Description"].ToString();
                         item.VAT = (int)reader["VAT"];
-                        item.Price = (double)reader["Price"];
+                        item.Price = (decimal)reader["Price"];
                         item.Amount = (int)reader["Amount"];
                         item.InStock = (bool)reader["InStock"];
                     }
@@ -126,7 +129,7 @@ namespace DAL.SQLcontext
         public bool RemoveItem(string id)
         {
             bool Success = false;
-            using (SqlConnection conn = new SqlConnection(data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
                 {
@@ -149,12 +152,41 @@ namespace DAL.SQLcontext
 
         public bool EditItem(ItemDTO item)
         {
-            throw new NotImplementedException();
-        }
+            bool Success = false;
+            using (SqlConnection conn = new SqlConnection(data.connection))
+            {
+                try
+                {
+                    conn.Open();
 
-        public bool OpenItem(string id)
-        {
-            throw new NotImplementedException();
+                    SqlCommand command = new SqlCommand("SaveItem", conn);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@ID", item.ItemID));
+                    command.Parameters.Add(new SqlParameter("@Name", item.ProductName));
+                    command.Parameters.Add(new SqlParameter("@Description", item.Description));
+                    command.Parameters.Add(new SqlParameter("@VAT", item.VAT));
+                    command.Parameters.Add(new SqlParameter("@Price", item.Price));
+                    command.Parameters.Add(new SqlParameter("@Amount", item.Amount));
+                    command.Parameters.Add(new SqlParameter("@InStock", item.InStock));
+
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Success = true;
+                    }
+                    reader.Close();
+                }
+                catch (Exception)
+                {
+                    Success = false;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return Success;
         }
     }
 }

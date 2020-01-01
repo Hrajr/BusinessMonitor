@@ -24,7 +24,6 @@ namespace BusinessMonitor.Controllers
         public IActionResult Item()
         {
             model.ListOfItems = _itemLogic.GetItem();
-            //model.ListOfItems.AddRange(allItems);
             return View(model);
         }
 
@@ -43,13 +42,13 @@ namespace BusinessMonitor.Controllers
                 ProductName = Name,
                 Description = Desc,
                 VAT = Convert.ToInt16(VAT),
-                Price = Convert.ToDouble(Price),
+                Price = Convert.ToDecimal(Price),
                 Amount = Convert.ToInt16(Amount),
                 InStock = Available
             };
-            if (_itemLogic.AddItem(newItem))
-            { return View("AddItem"); }
-            return RedirectToAction("Item");
+            if(_itemLogic.AddItem(newItem))
+            { return RedirectToAction("Item"); }
+            return View("AddItem");
         }
 
         [HttpPost]
@@ -61,13 +60,13 @@ namespace BusinessMonitor.Controllers
                 ProductName = Name,
                 Description = Desc,
                 VAT = Convert.ToInt16(VAT),
-                Price = Convert.ToDouble(Price),
+                Price = Convert.ToDecimal(Price),
                 Amount = Convert.ToInt16(Amount),
                 InStock = Available
             };
             if (_itemLogic.EditItem(newItem))
-            { return View("EditItem"); }
-            return View("Item");
+            { return RedirectToAction("Item"); }
+            return View("EditItem");
         }
 
         [HttpPost]
@@ -81,16 +80,7 @@ namespace BusinessMonitor.Controllers
         [Route("EditItem")]
         public IActionResult EditItem(string id)
         {
-            var item = new ItemViewModel()
-            {
-                ItemID = "Test",
-                ProductName = "Name",
-                Description = "Desc",
-                Price = 2,
-                VAT = 202,
-                Amount = 50,
-                InStock = false
-            };
+            var item = new ItemViewModel(_itemLogic.GetItemByID(id));
             return View("EditItem", item);
         }
     }

@@ -22,17 +22,20 @@ namespace Logic
         {
             bool Success = false;
             string Input = user.Password;
+
             user = new User(_context.Login(user.ConvertToDTO(user)));
             user.Password = Hashing.GetHash(Input, user.Salt);
+
             if (HashValid(Input, user.Salt, user.Password))
-            { Success = true; }
+            {
+                Success = true;
+            }
             return Success;
         }
 
         private static bool HashValid(string Input, string Salt, string Password)
         {
-            bool Check = Hashing.Validate(Input, Salt, Password);
-            return Check;
+            return Hashing.Validate(Input, Salt, Password);
         }
 
         public bool AdminCheck(User user)

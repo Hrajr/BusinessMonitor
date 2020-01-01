@@ -1,0 +1,30 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Signin";
+}
+
+<h1>Signin</h1>
+
+<div class="col-md-8 order-md-1">
+    <h4 class="mb-3">Billing address</h4>
+    <form asp-controller="Session" asp-action="LoginSubmit">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="Username" name="Username" asp-for="Username" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                    Valid username is required.
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="Password" name="Password" asp-for="Password" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                    Valid password is required.
+                </div>
+            </div>
+        </div>
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="submit">Sign in</button>
+    </form>
+</div>
