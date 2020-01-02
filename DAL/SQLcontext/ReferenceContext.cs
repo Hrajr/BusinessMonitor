@@ -72,7 +72,7 @@ namespace DAL.SQLcontext
 
                     SqlCommand command = new SqlCommand("EditReference", conn);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("@CompanyName", reference.ID));
+                    command.Parameters.Add(new SqlParameter("@ID", reference.ID));
                     command.Parameters.Add(new SqlParameter("@CompanyName", reference.CompanyName));
                     command.Parameters.Add(new SqlParameter("@ContactName", reference.ContactName));
                     command.Parameters.Add(new SqlParameter("@Address", reference.Address));
@@ -87,7 +87,7 @@ namespace DAL.SQLcontext
                     command.Parameters.Add(new SqlParameter("@KvK", reference.KvK));
                     command.Parameters.Add(new SqlParameter("@VAT", reference.VAT));
                     command.Parameters.Add(new SqlParameter("@Doubtfull", reference.Doubtfull));
-                    command.Parameters.Add(new SqlParameter("@Date", reference.Date));
+                    command.Parameters.Add(new SqlParameter("@Date", reference.Date.ToString()));
                     command.Parameters.Add(new SqlParameter("@Note", reference.Note));
 
                     var reader = command.ExecuteReader();
@@ -175,6 +175,7 @@ namespace DAL.SQLcontext
 
                     while (reader.Read())
                     {
+                        reference.ID = id;
                         reference.CompanyName = reader["CompanyName"].ToString();
                         reference.ContactName = reader["ContactName"].ToString();
                         reference.Address = reader["Address"].ToString();

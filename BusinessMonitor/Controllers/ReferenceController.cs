@@ -39,7 +39,6 @@ namespace BusinessMonitor.Controllers
         [Route("SubmitReference")]
         public IActionResult SubmitReference(IFormCollection formCollection)
         {
-            var test = false;
             var newReference = new Reference
             {
                 CompanyName = formCollection["CompanyName"],
@@ -56,10 +55,10 @@ namespace BusinessMonitor.Controllers
                 KvK = formCollection["KvK"],
                 VAT = formCollection["VAT"],
                 Doubtfull = Convert.ToBoolean(formCollection["Doubtfull"]),
-                Date = DateTime.Now,
+                Date = DateTime.Today,
                 Note = formCollection["Note"],
             };
-            if (test)
+            if (_referenceLogic.AddReference(newReference))
             { return View("AddReference"); }
             return RedirectToAction("Reference");
         }
@@ -84,6 +83,7 @@ namespace BusinessMonitor.Controllers
                 BIC = bic,
                 IBAN = iban,
                 Note = note,
+                Date = DateTime.Now,
                 Doubtfull = doubtfull
             };
             if (_referenceLogic.EditReference(reference))
@@ -95,25 +95,7 @@ namespace BusinessMonitor.Controllers
         [Route("EditReference")]
         public IActionResult EditReference(string id)
         {
-            var item = new ReferenceViewModel()
-            {
-                ID = "TestID",
-                CompanyName = "TestCompany",
-                ContactName = "Dirk van den Veen",
-                Address = "Exeaten 1",
-                Zipcode = "6044 BA",
-                Place = "Baexem",
-                Country = "The Netherlands",
-                KvK = "TestKVK",
-                IBAN = "TestIBAN",
-                Bank = "ING",
-                BIC = "INGB",
-                VAT = "VATnum",
-                PhoneNumber = "TestPhone",
-                Email = "TestEmail",
-                Doubtfull = false,
-                Note = "He didn't payed for 3 years!"
-            };
+            var item = new ReferenceViewModel(_referenceLogic.GetReferenceByID(id));
             return View("EditReference", item);
         }
 
