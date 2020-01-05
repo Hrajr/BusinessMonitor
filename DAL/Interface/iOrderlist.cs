@@ -7,6 +7,9 @@ namespace DAL.Interface
 {
     public interface iOrderlist
     {
-        OrderlistDTO GetOrderByID(string iD);
+        OrderlistDTO GetOrderByID(string ID);
+        bool AddOrderlist(string ID, string ItemID, int Amount, decimal Price);
+        bool RemoveOrder(string ID);
+        bool RemoveItemFromOrder(string ID, string ItemID);
     }
 }

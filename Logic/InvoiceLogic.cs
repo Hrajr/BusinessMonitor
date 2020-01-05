@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Logic
 {
-    public class InvoiceLogic
+    public class InvoiceLogic : ING
     {
         private readonly iInvoice _context;
         private readonly ReferenceLogic _referenceLogic;
@@ -25,6 +25,8 @@ namespace Logic
 
         public bool AddInvoice(Invoice invoice)
         {
+            invoice.InvoiceNumber = invoicenumber;
+            invoice.InvoiceOrder.AddOrderlist(invoicenumber, invoice.InvoiceOrder);
             invoice.InvoiceReference = _referenceLogic.GetReferenceByID(invoice.InvoiceReference.ID);
             return _context.AddInvoice(invoice.ConvertToDTO(invoice));
         }

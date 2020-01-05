@@ -55,5 +55,31 @@ namespace Logic.Models
         {
             return new OrderList(_context.GetOrderByID(ID));
         }
+
+        public bool AddOrderlist(string ID, OrderList items)
+        {
+            try
+            {
+                for (int i = 0; i < items.OrderItem.Count; i++)
+                {
+                    _context.AddOrderlist(ID, items.OrderItem[i].ItemID, items.OrderItem[i].Amount, items.OrderItem[i].Price);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool RemoveItemFromOrder(string ID, string ItemID)
+        {
+            return _context.RemoveItemFromOrder(ID, ItemID);
+        }
+
+        public bool DeleteOrder(string ID)
+        {
+            return _context.RemoveOrder(ID);
+        }
     }
 }
