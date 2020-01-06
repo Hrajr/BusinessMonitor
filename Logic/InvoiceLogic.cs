@@ -33,7 +33,12 @@ namespace Logic
 
         public bool RemoveInvoice(string id)
         {
-            return _context.RemoveInvoice(id);
+            if (_context.RemoveInvoice(id))
+            {
+                _orderlist.DeleteOrder(id);
+                return true;
+            }
+            else return false;
         }
 
         public bool EditInvoice(Invoice invoice)
@@ -50,7 +55,7 @@ namespace Logic
         public Invoice GetInvoiceByID(string id)
         {
             var returnedInvoice = new Invoice(_context.GetInvoiceByID(id));
-            returnedInvoice.InvoiceReference = _referenceLogic.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
+            //returnedInvoice.InvoiceReference = _referenceLogic.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
             returnedInvoice.InvoiceUser = _userLogic.GetUserByID(returnedInvoice.InvoiceUser.ID);
             returnedInvoice.InvoiceOrder = returnedInvoice.InvoiceOrder.GetOrderByID(returnedInvoice.InvoiceOrder.OrderID);
             return returnedInvoice;

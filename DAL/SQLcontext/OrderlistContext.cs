@@ -69,7 +69,7 @@ namespace DAL.SQLcontext
                         var item = new ItemDTO
                         {
                             ItemID = reader["ItemID"].ToString(),
-                            Price = Convert.ToDecimal(reader["Price"]),
+                            Price = Convert.ToDecimal(reader["Price"].ToString()),
                             Amount = (int)reader["Amount"]
                         };
                         Order.OrderItem.Add(item);

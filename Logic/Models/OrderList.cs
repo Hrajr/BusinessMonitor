@@ -3,6 +3,7 @@ using DAL.Interface.DTO;
 using DAL.SQLcontext;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Logic.Models
@@ -10,6 +11,7 @@ namespace Logic.Models
     public class OrderList
     {
         private readonly iOrderlist _context;
+        private readonly ItemLogic _itemLogic = new ItemLogic();
         public string OrderID { get; set; }
         public List<Item> OrderItem { get; set; }
 
@@ -27,7 +29,6 @@ namespace Logic.Models
         {
             _context = new OrderlistContext();
             OrderID = order.OrderID;
-            //OrderItem = GetOrderByID(OrderID).OrderItem;
             OrderItem = order.OrderItem.ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
         }
 
@@ -55,7 +56,19 @@ namespace Logic.Models
 
         public OrderList GetOrderByID(string ID)
         {
-            return new OrderList(_context.GetOrderByID(ID));
+            var correspondingOrderlist = new OrderList(_context.GetOrderByID(ID));
+            for (int i = 0; i < correspondingOrderlist.OrderItem.Count; i++)
+            {
+                var correspondingItem = _itemLogic.GetItemByID(correspondingOrderlist.OrderItem[i].ItemID);
+                var currentItem = correspondingOrderlist.OrderItem.FirstOrDefault(x => x.ItemID == correspondingOrderlist.OrderItem[i].ItemID);
+                if (currentItem != null)
+                {
+                    currentItem.ProductName = correspondingItem.ProductName;
+                    currentItem.Description = correspondingItem.Description;
+                    currentItem.InStock = correspondingItem.InStock;
+                }
+            }
+            return correspondingOrderlist;
         }
 
         public bool AddOrderlist(string ID, OrderList items)

@@ -149,7 +149,7 @@ namespace DAL.SQLcontext
                     {
                         invoice.InvoiceNumber = reader["ID"].ToString();
                         invoice.TypeOfInvoice = (Invoicetype)System.Enum.Parse(typeof(Invoicetype), reader["Type"].ToString());
-                        invoice.InvoiceReference = new ReferenceDTO() { ID = reader["ID"].ToString() };
+                        invoice.InvoiceReference = new ReferenceDTO() { ID = reader["Reference"].ToString() };
                         invoice.InvoiceOrder = new OrderlistDTO() { OrderID = reader["Orderlist"].ToString() };
                         invoice.InvoiceDate = Convert.ToDateTime(reader["InvoiceDate"].ToString());
                         invoice.PaymentDate = Convert.ToDateTime(reader["PaymentDate"].ToString());
@@ -174,12 +174,12 @@ namespace DAL.SQLcontext
                 try
                 {
                     conn.Open();
-                    SqlCommand command = new SqlCommand("RemoveReference", conn);
+                    SqlCommand command = new SqlCommand("RemoveInvoice", conn);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@ID", id));
                     var reader = command.ExecuteReader();
-                    while (reader.Read())
-                    { Success = true; }
+                    reader.Read();
+                    Success = true;
                     reader.Close();
                 }
                 catch (Exception)
