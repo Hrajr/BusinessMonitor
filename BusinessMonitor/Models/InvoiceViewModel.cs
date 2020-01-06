@@ -44,13 +44,8 @@ namespace BusinessMonitor.Models
         //    Description = "This is a mockItem description for testing purpose"}
         //};
         public List<Invoice> ListOfInvoices = new List<Invoice>();
-        public List<Reference> ListOfReferences = new List<Reference>()
-        {
-            new Reference(){ID = "Test1", CompanyName = "TestName1"},
-            new Reference(){ID = "Test2", CompanyName = "TestName2"},
-            new Reference(){ID = "Test3", CompanyName = "TestName3"},
-            new Reference(){ID = "Test4", CompanyName = "TestName4"}
-        };
+        public List<Reference> ListOfReferences = new List<Reference>();
+        public List<Item> ListOfItems = new List<Item>();
 
         public enum InvoiceType
         {

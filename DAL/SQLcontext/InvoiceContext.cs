@@ -22,9 +22,15 @@ namespace DAL.SQLcontext
                 {
                     conn.Open();
 
-                    SqlCommand command = new SqlCommand("AddReference", conn);
+                    SqlCommand command = new SqlCommand("CreateInvoice", conn);
                     command.CommandType = CommandType.StoredProcedure;
-                    //command.Parameters.Add(new SqlParameter("@CompanyName", reference.CompanyName));
+                    command.Parameters.Add(new SqlParameter("@ID", invoice.InvoiceNumber));
+                    command.Parameters.Add(new SqlParameter("@Type", invoice.TypeOfInvoice));
+                    command.Parameters.Add(new SqlParameter("@Reference", invoice.InvoiceReference.ID));
+                    command.Parameters.Add(new SqlParameter("@InvoiceDate", invoice.InvoiceDate));
+                    command.Parameters.Add(new SqlParameter("@PaymentDate", invoice.PaymentDate));
+                    command.Parameters.Add(new SqlParameter("@UserID", invoice.InvoiceUser.UserID));
+                    command.Parameters.Add(new SqlParameter("@PaymentStatus", invoice.PaymentStatus));
 
                     var reader = command.ExecuteReader();
 
@@ -55,9 +61,15 @@ namespace DAL.SQLcontext
                 {
                     conn.Open();
 
-                    SqlCommand command = new SqlCommand("EditReference", conn);
+                    SqlCommand command = new SqlCommand("EditInvoice", conn);
                     command.CommandType = CommandType.StoredProcedure;
-                    //command.Parameters.Add(new SqlParameter("@CompanyName", reference.ID));
+                    command.Parameters.Add(new SqlParameter("@ID", invoice.InvoiceNumber));
+                    command.Parameters.Add(new SqlParameter("@Type", invoice.TypeOfInvoice));
+                    command.Parameters.Add(new SqlParameter("@Reference", invoice.InvoiceReference.ID));
+                    command.Parameters.Add(new SqlParameter("@InvoiceDate", invoice.InvoiceDate));
+                    command.Parameters.Add(new SqlParameter("@PaymentDate", invoice.PaymentDate));
+                    command.Parameters.Add(new SqlParameter("@UserID", invoice.InvoiceUser.UserID));
+                    command.Parameters.Add(new SqlParameter("@PaymentStatus", invoice.PaymentStatus));
 
                     var reader = command.ExecuteReader();
 
@@ -88,7 +100,7 @@ namespace DAL.SQLcontext
                 {
                     conn.Open();
 
-                    SqlCommand command = new SqlCommand("GetAllReferences", conn);
+                    SqlCommand command = new SqlCommand("GetAllInvoice", conn);
                     command.CommandType = CommandType.StoredProcedure;
 
                     var reader = command.ExecuteReader();
@@ -97,23 +109,14 @@ namespace DAL.SQLcontext
                     {
                         var invoice = new InvoiceDTO
                         {
-                            //ID = reader["ID"].ToString(),
-                            //CompanyName = reader["CompanyName"].ToString(),
-                            //ContactName = reader["ContactName"].ToString(),
-                            //Address = reader["Address"].ToString(),
-                            //Zipcode = reader["Zipcode"].ToString(),
-                            //Place = reader["Place"].ToString(),
-                            //Country = reader["Country"].ToString(),
-                            //PhoneNumber = reader["PhoneNumber"].ToString(),
-                            //Email = reader["Email"].ToString(),
-                            //Bank = reader["Bank"].ToString(),
-                            //BIC = reader["BIC"].ToString(),
-                            //IBAN = reader["IBAN"].ToString(),
-                            //KvK = reader["KvK"].ToString(),
-                            //VAT = reader["VAT"].ToString(),
-                            //Doubtfull = (bool)reader["Doubtfull"],
-                            //Date = (DateTime)reader["Date"],
-                            //Note = reader["Note"].ToString()
+                            InvoiceNumber = reader["ID"].ToString(),
+                            TypeOfInvoice = (Invoicetype)System.Enum.Parse(typeof(Invoicetype), reader["Type"].ToString()),
+                            InvoiceReference = new ReferenceDTO() { ID = reader["Reference"].ToString() },
+                            InvoiceOrder = new OrderlistDTO() { OrderID = reader["Orderlist"].ToString() },
+                            InvoiceDate = Convert.ToDateTime(reader["InvoiceDate"].ToString()),
+                            PaymentDate = Convert.ToDateTime(reader["PaymentDate"].ToString()),
+                            InvoiceUser = new UserDTO() { UserID = reader["UserID"].ToString() },
+                            PaymentStatus = (bool)reader["PaymentStatus"],
                         };
                         CollectedReferences.Add(invoice);
                     }
@@ -136,7 +139,7 @@ namespace DAL.SQLcontext
                 {
                     conn.Open();
 
-                    SqlCommand command = new SqlCommand("GetReferenceByID", conn);
+                    SqlCommand command = new SqlCommand("GetInvoiceByID", conn);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@ID", id));
 
@@ -144,22 +147,14 @@ namespace DAL.SQLcontext
 
                     while (reader.Read())
                     {
-                        //reference.CompanyName = reader["CompanyName"].ToString();
-                        //reference.ContactName = reader["ContactName"].ToString();
-                        //reference.Address = reader["Address"].ToString();
-                        //reference.Zipcode = reader["Zipcode"].ToString();
-                        //reference.Place = reader["Place"].ToString();
-                        //reference.Country = reader["Country"].ToString();
-                        //reference.PhoneNumber = reader["PhoneNumber"].ToString();
-                        //reference.Email = reader["Email"].ToString();
-                        //reference.Bank = reader["Bank"].ToString();
-                        //reference.BIC = reader["BIC"].ToString();
-                        //reference.IBAN = reader["IBAN"].ToString();
-                        //reference.KvK = reader["KvK"].ToString();
-                        //reference.VAT = reader["VAT"].ToString();
-                        //reference.Doubtfull = (bool)reader["Doubtfull"];
-                        //reference.Date = (DateTime)reader["Date"];
-                        //reference.Note = reader["Note"].ToString();
+                        invoice.InvoiceNumber = reader["ID"].ToString();
+                        invoice.TypeOfInvoice = (Invoicetype)System.Enum.Parse(typeof(Invoicetype), reader["Type"].ToString());
+                        invoice.InvoiceReference = new ReferenceDTO() { ID = reader["ID"].ToString() };
+                        invoice.InvoiceOrder = new OrderlistDTO() { OrderID = reader["Orderlist"].ToString() };
+                        invoice.InvoiceDate = Convert.ToDateTime(reader["InvoiceDate"].ToString());
+                        invoice.PaymentDate = Convert.ToDateTime(reader["PaymentDate"].ToString());
+                        invoice.InvoiceUser = new UserDTO() { UserID = reader["UserID"].ToString() };
+                        invoice.PaymentStatus = (bool)reader["PaymentStatus"];
                     }
                     reader.Close();
                 }

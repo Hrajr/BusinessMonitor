@@ -23,7 +23,7 @@ namespace BusinessMonitor.Controllers
         [Route("Item")]
         public IActionResult Item()
         {
-            model.ListOfItems = _itemLogic.GetItem();
+            model.ListOfItems = GetAllItems();
             return View(model);
         }
 
@@ -82,6 +82,11 @@ namespace BusinessMonitor.Controllers
         {
             var item = new ItemViewModel(_itemLogic.GetItemByID(id));
             return View("EditItem", item);
+        }
+
+        public List<Item> GetAllItems()
+        {
+            return _itemLogic.GetItem();
         }
     }
 }

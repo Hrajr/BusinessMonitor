@@ -13,14 +13,14 @@ namespace Logic
         private readonly iInvoice _context;
         private readonly ReferenceLogic _referenceLogic;
         private readonly UserLogic _userLogic;
-        private readonly OrderList _orderlistLogic;
+        private readonly OrderList _orderlist;
 
         public InvoiceLogic()
         {
             _context = new InvoiceContext();
             _referenceLogic = new ReferenceLogic();
             _userLogic = new UserLogic();
-            _orderlistLogic = new OrderList();
+            _orderlist = new OrderList();
         }
 
         public bool AddInvoice(Invoice invoice)
@@ -52,7 +52,7 @@ namespace Logic
             var returnedInvoice = new Invoice(_context.GetInvoiceByID(id));
             returnedInvoice.InvoiceReference = _referenceLogic.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
             returnedInvoice.InvoiceUser = _userLogic.GetUserByID(returnedInvoice.InvoiceUser.ID);
-            returnedInvoice.InvoiceOrder = _orderlistLogic.GetOrderByID(returnedInvoice.InvoiceOrder.OrderID);
+            returnedInvoice.InvoiceOrder = returnedInvoice.InvoiceOrder.GetOrderByID(returnedInvoice.InvoiceOrder.OrderID);
             return returnedInvoice;
         }
     }

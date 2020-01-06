@@ -17,10 +17,12 @@ namespace BusinessMonitor.Controllers
         private readonly InvoiceLogic _invoiceLogic;
         private InvoiceViewModel model = new InvoiceViewModel();
         private ReferenceController RefCont = new ReferenceController();
+        private ItemController ItemCont = new ItemController();
 
         public InvoiceController()
         {
             model.ListOfReferences = RefCont.GetAllReference();
+            model.ListOfItems = ItemCont.GetAllItems();
             _invoiceLogic = new InvoiceLogic();
         }
 
@@ -42,7 +44,7 @@ namespace BusinessMonitor.Controllers
         [HttpPost]
         public IActionResult SaveInvoice(string id, string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string userID, string paymentStatus)
         {
-            var collectedInformation = new Invoice(id, referenceID, orderlist, invoiceType, userID, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
+            var collectedInformation = new Invoice(id, referenceID, orderlist, invoiceType, User.Identity.Name, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
             _invoiceLogic.EditInvoice(collectedInformation);
             return View();
         }
@@ -51,6 +53,7 @@ namespace BusinessMonitor.Controllers
         public IActionResult SubmitInvoice(string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string paymentStatus)
         {
             var collectedNewInformation = new Invoice(referenceID, orderlist, invoiceType, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
+            collectedNewInformation.InvoiceUser = new User() { ID = "5353A3AC-7EA7-4A68-B428-8D1734569872" };
             _invoiceLogic.AddInvoice(collectedNewInformation);
             return View("Invoice");
         }

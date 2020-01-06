@@ -8,5 +8,10 @@ namespace DAL.Interface.DTO
     {
         public string OrderID { get; set; }
         public List<ItemDTO> OrderItem { get; set; }
+
+        public OrderlistDTO()
+        {
+            OrderItem = new List<ItemDTO>();
+        }
     }
 }

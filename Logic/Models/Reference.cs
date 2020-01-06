@@ -52,22 +52,46 @@ namespace Logic.Models
         public Reference(ReferenceDTO reference)
         {
             ID = reference.ID;
-            CompanyName = reference.CompanyName;
-            ContactName = reference.ContactName;
-            Address = reference.Address;
-            Zipcode = reference.Zipcode;
-            Place = reference.Place;
-            Country = reference.Country;
-            PhoneNumber = reference.PhoneNumber;
-            Email = reference.Email;
-            Bank = reference.Bank;
-            BIC = reference.BIC;
-            IBAN = reference.IBAN;
-            KvK = reference.KvK;
-            VAT = reference.VAT;
-            Doubtfull = reference.Doubtfull;
-            Date = reference.Date;
-            Note = reference.Note;
+            if (reference.CompanyName == null)
+            {
+                var _logic = new ReferenceLogic();
+                var correspondingReference = _logic.GetReferenceByID(reference.ID);
+                CompanyName = correspondingReference.CompanyName;
+                ContactName = correspondingReference.ContactName;
+                Address = correspondingReference.Address;
+                Zipcode = correspondingReference.Zipcode;
+                Place = correspondingReference.Place;
+                Country = correspondingReference.Country;
+                PhoneNumber = correspondingReference.PhoneNumber;
+                Email = correspondingReference.Email;
+                Bank = correspondingReference.Bank;
+                BIC = correspondingReference.BIC;
+                IBAN = correspondingReference.IBAN;
+                KvK = correspondingReference.KvK;
+                VAT = correspondingReference.VAT;
+                Doubtfull = correspondingReference.Doubtfull;
+                Date = correspondingReference.Date;
+                Note = correspondingReference.Note;
+            }
+            else
+            {
+                CompanyName = reference.CompanyName;
+                ContactName = reference.ContactName;
+                Address = reference.Address;
+                Zipcode = reference.Zipcode;
+                Place = reference.Place;
+                Country = reference.Country;
+                PhoneNumber = reference.PhoneNumber;
+                Email = reference.Email;
+                Bank = reference.Bank;
+                BIC = reference.BIC;
+                IBAN = reference.IBAN;
+                KvK = reference.KvK;
+                VAT = reference.VAT;
+                Doubtfull = reference.Doubtfull;
+                Date = reference.Date;
+                Note = reference.Note;
+            }
         }
 
         public ReferenceDTO ConvertToDTO(Reference reference)

@@ -25,7 +25,9 @@ namespace Logic.Models
 
         public OrderList(OrderlistDTO order)
         {
+            _context = new OrderlistContext();
             OrderID = order.OrderID;
+            //OrderItem = GetOrderByID(OrderID).OrderItem;
             OrderItem = order.OrderItem.ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
         }
 
