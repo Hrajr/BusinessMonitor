@@ -72,5 +72,11 @@ namespace BusinessMonitor.Controllers
             model.SingleInvoice = _invoiceLogic.GetInvoiceByID(id);
             return View("EditInvoice", model);
         }
+
+        public JsonResult GetReferenceInformation(string id)
+        {
+            model.InvoiceReference = RefCont.GetReferenceById(id);
+            return Json(model);
+        }
     }
 }

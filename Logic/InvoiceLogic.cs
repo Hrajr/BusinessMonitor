@@ -13,6 +13,7 @@ namespace Logic
         private readonly iInvoice _context;
         private readonly ReferenceLogic _referenceLogic;
         private readonly UserLogic _userLogic;
+        private readonly ItemLogic _itemLogic;
         private readonly OrderList _orderlist;
 
         public InvoiceLogic()
@@ -20,6 +21,7 @@ namespace Logic
             _context = new InvoiceContext();
             _referenceLogic = new ReferenceLogic();
             _userLogic = new UserLogic();
+            _itemLogic = new ItemLogic();
             _orderlist = new OrderList();
         }
 
@@ -27,6 +29,7 @@ namespace Logic
         {
             invoice.InvoiceNumber = invoicenumber;
             invoice.InvoiceOrder.AddOrderlist(invoicenumber, invoice.InvoiceOrder);
+            invoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(invoice.InvoiceOrder.OrderItem);
             invoice.InvoiceReference = _referenceLogic.GetReferenceByID(invoice.InvoiceReference.ID);
             return _context.AddInvoice(invoice.ConvertToDTO(invoice));
         }
@@ -44,6 +47,7 @@ namespace Logic
         public bool EditInvoice(Invoice invoice)
         {
             invoice.InvoiceReference = _referenceLogic.GetReferenceByID(invoice.InvoiceReference.ID);
+            //invoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(invoice.InvoiceOrder.OrderItem);
             return _context.EditInvoice(invoice.ConvertToDTO(invoice));
         }
 
@@ -55,9 +59,10 @@ namespace Logic
         public Invoice GetInvoiceByID(string id)
         {
             var returnedInvoice = new Invoice(_context.GetInvoiceByID(id));
-            //returnedInvoice.InvoiceReference = _referenceLogic.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
+            returnedInvoice.InvoiceReference = _referenceLogic.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
             returnedInvoice.InvoiceUser = _userLogic.GetUserByID(returnedInvoice.InvoiceUser.ID);
             returnedInvoice.InvoiceOrder = returnedInvoice.InvoiceOrder.GetOrderByID(returnedInvoice.InvoiceOrder.OrderID);
+            returnedInvoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(returnedInvoice.InvoiceOrder.OrderItem);
             return returnedInvoice;
         }
     }

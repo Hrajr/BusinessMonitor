@@ -8,7 +8,7 @@
         <h4 class="d-flex justify-content-between align-items-center mb-3">
             <label for="Reference">Select the reference:</label>
         </h4>
-        <select class="custom-select d-block w-100" id="References" name="References" required>
+        <select class="custom-select d-block w-100" id="References" name="References" onchange="GetReference()" required>
             @foreach (var supplier in Model.ListOfReferences)
             {
                 <option value="@supplier.ID">@supplier.CompanyName</option>
@@ -17,16 +17,16 @@
         <ul class="list-group mb-3">
             <li class="list-group-item d-flex justify-content-between lh-condensed">
                 <div>
-                    <h6 class="my-0">Reference name</h6>
-                    <small class="text-muted">Contactname: </small><br />
-                    <small class="text-muted">Address 1:</small><br />
-                    <small class="text-muted">Address 2:</small><br />
-                    <small class="text-muted">IBAN: </small><br />
-                    <small class="text-muted">VAT: </small><br />
-                    <small class="text-muted">Doubtfull: </small><br />
-                    <small class="text-muted">Note: </small>
+                    <input id="RefName" class="my-0" style="border:0; background-color:#ffffff;" value="Reference name" disabled><br />
+                    <input id="ConName" class="text-muted" style="border:0; background-color:#ffffff;" value="Contactname" disabled><br />
+                    <input id="Add1" class="text-muted" style="border:0; background-color:#ffffff;" value="Address 1" disabled><br />
+                    <input id="Add2" class="text-muted" style="border:0; background-color:#ffffff;" value="Address 2" disabled><br />
+                    <input id="Iban" class="text-muted" style="border:0; background-color:#ffffff;" value="IBAN" disabled><br />
+                    <input id="Vat" class="text-muted" style="border:0; background-color:#ffffff;" value="VAT" disabled><br />
+                    <input id="Dou" class="text-muted" style="border:0; background-color:#ffffff;" value="Doubtfull" disabled><br />
+                    <input id="Note" class="text-muted" style="border:0; background-color:#ffffff;" value="Note" disabled>
                 </div>
-                <span class="text-muted">ReferenceID</span>
+                <span id="RefId" class="text-muted">ReferenceID</span>
             </li>
         </ul>
     </div>
@@ -204,6 +204,54 @@
         var currentAmount = parseInt(document.getElementById("amountof" + ID).value);
         console.log(currentDIV.value = currentAmount + 1);
         currentDIV.value = currentAmount + 1;
+    }
+    function GetReference() {
+        var id = document.getElementById("References").value;
+        $.ajax({
+            type: "Get",
+            url: '/Invoice/GetReferenceInformation',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: {
+                'id': id,
+            },
+
+            success: function (response) {
+                if (response != null) {
+                    LoadReference(response);
+                }
+                else {
+                    alert("Error getting the data.");
+                }
+            },
+            failure: function (response) {
+                alert("Failed loading reference...");
+            },
+            error: function (response) {
+                alert("Failed loading reference...");
+            }
+        });
+    }
+    function LoadReference(selectedReference) {
+        var RefName = document.getElementById("RefName");
+        var ConName = document.getElementById("ConName");
+        var Add1 = document.getElementById("Add1");
+        var Add2 = document.getElementById("Add2");
+        var Iban = document.getElementById("Iban");
+        var Vat = document.getElementById("Vat");
+        var Dou = document.getElementById("Dou");
+        var Note = document.getElementById("Note");
+        var RefId = document.getElementById("RefId");
+        RefName.value = selectedReference.invoiceReference.companyName;
+        ConName.value = selectedReference.invoiceReference.contactName;
+        Add1.value = selectedReference.invoiceReference.address + " " + selectedReference.invoiceReference.zipcode;
+        Add2.value = selectedReference.invoiceReference.place + " " + selectedReference.invoiceReference.country;
+        Iban.value = selectedReference.invoiceReference.iban;
+        Vat.value = selectedReference.invoiceReference.vat;
+        Dou.value = selectedReference.invoiceReference.doubtfull;
+        Note.value = selectedReference.invoiceReference.note;
+        RefId.value = selectedReference.invoiceReference.id;
+        console.log(selectedReference.invoiceReference.companyName);
     }
     //function CheckExcisting(ID, Name, Description, Price) {
     //    var CurrentSituation = compressArray(returnItems);

@@ -95,7 +95,7 @@ namespace BusinessMonitor.Controllers
         [Route("EditReference")]
         public IActionResult EditReference(string id)
         {
-            var item = new ReferenceViewModel(_referenceLogic.GetReferenceByID(id));
+            var item = new ReferenceViewModel(GetReferenceById(id));
             return View("EditReference", item);
         }
 
@@ -109,6 +109,11 @@ namespace BusinessMonitor.Controllers
         public List<Reference> GetAllReference()
         {
             return _referenceLogic.GetReference();
+        }
+
+        public Reference GetReferenceById(string id)
+        {
+            return _referenceLogic.GetReferenceByID(id);
         }
     }
 }

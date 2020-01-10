@@ -4,6 +4,7 @@ using DAL.SQLcontext;
 using Logic.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Logic
@@ -39,6 +40,15 @@ namespace Logic
         public Item GetItemByID(string id)
         {
             return new Item(_context.GetItemByID(id));
+        }
+
+        public List<Item> GetPriceOfList(List<Item> ListOfItems)
+        {
+            foreach (var item in ListOfItems)
+            {
+                item.Price = _context.GetItemByID(item.ItemID).Price;
+            }
+            return ListOfItems;
         }
     }
 }
