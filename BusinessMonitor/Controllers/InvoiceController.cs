@@ -42,10 +42,11 @@ namespace BusinessMonitor.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveInvoice(string id, string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string userID, string paymentStatus)
+        public IActionResult SaveInvoice(string id, string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string userID, string paymentStatus, string oldID)
         {
             var collectedInformation = new Invoice(id, referenceID, orderlist, invoiceType, User.Identity.Name, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
-            _invoiceLogic.EditInvoice(collectedInformation);
+            collectedInformation.InvoiceUser = new User() { ID = "5353A3AC-7EA7-4A68-B428-8D1734569872" };
+            _invoiceLogic.EditInvoice(oldID ,collectedInformation);
             return View();
         }
 

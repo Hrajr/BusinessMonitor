@@ -77,11 +77,24 @@ namespace Logic.Models
             {
                 for (int i = 0; i < items.OrderItem.Count; i++)
                 {
+                    items.OrderItem[i].Price = _itemLogic.GetItemByID(items.OrderItem[i].ItemID).Price;
                     _context.AddOrderlist(ID, items.OrderItem[i].ItemID, items.OrderItem[i].Amount, items.OrderItem[i].Price);
                 }
                 return true;
             }
             catch
+            {
+                return false;
+            }
+        }
+
+        public bool UpdateOrderlist(string oldID, string newID, OrderList items)
+        {
+            if (AddOrderlist(newID, items) && DeleteOrder(oldID))
+            {
+                return true;
+            }
+            else
             {
                 return false;
             }

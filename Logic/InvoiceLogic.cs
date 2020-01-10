@@ -1,4 +1,5 @@
 ﻿using DAL.Interface;
+using DAL.Interface.DTO;
 using DAL.Memory;
 using DAL.SQLcontext;
 using Logic.Models;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace Logic
 {
-    public class InvoiceLogic : ING
+    public class InvoiceLogic
     {
         private readonly iInvoice _context;
         private readonly ReferenceLogic _referenceLogic;
@@ -27,8 +28,8 @@ namespace Logic
 
         public bool AddInvoice(Invoice invoice)
         {
-            invoice.InvoiceNumber = invoicenumber;
-            invoice.InvoiceOrder.AddOrderlist(invoicenumber, invoice.InvoiceOrder);
+            invoice.InvoiceNumber = GenerateInvoiceNumber(invoice.TypeOfInvoice);
+            invoice.InvoiceOrder.AddOrderlist(GenerateInvoiceNumber(invoice.TypeOfInvoice), invoice.InvoiceOrder);
             invoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(invoice.InvoiceOrder.OrderItem);
             invoice.InvoiceReference = _referenceLogic.GetReferenceByID(invoice.InvoiceReference.ID);
             return _context.AddInvoice(invoice.ConvertToDTO(invoice));
@@ -44,11 +45,15 @@ namespace Logic
             else return false;
         }
 
-        public bool EditInvoice(Invoice invoice)
+        public bool EditInvoice(string oldID, Invoice invoice)
         {
             invoice.InvoiceReference = _referenceLogic.GetReferenceByID(invoice.InvoiceReference.ID);
-            //invoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(invoice.InvoiceOrder.OrderItem);
-            return _context.EditInvoice(invoice.ConvertToDTO(invoice));
+            if (CheckInvoiceNumber(invoice.InvoiceNumber))
+            { GenerateInvoiceNumber(invoice.TypeOfInvoice); }
+            invoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(invoice.InvoiceOrder.OrderItem);
+            invoice.InvoiceOrder.OrderID = invoice.InvoiceNumber;
+            _orderlist.UpdateOrderlist(oldID, invoice.InvoiceOrder.OrderID, invoice.InvoiceOrder);
+            return _context.EditInvoice(oldID, invoice.ConvertToDTO(invoice));
         }
 
         public List<Invoice> GetInvoice()
@@ -64,6 +69,22 @@ namespace Logic
             returnedInvoice.InvoiceOrder = returnedInvoice.InvoiceOrder.GetOrderByID(returnedInvoice.InvoiceOrder.OrderID);
             returnedInvoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(returnedInvoice.InvoiceOrder.OrderItem);
             return returnedInvoice;
+        }
+
+        public string GenerateInvoiceNumber(Invoicetype info)
+        {
+            var NewInvoiceNumber = info.ToString();
+            NewInvoiceNumber = NewInvoiceNumber + ":" + DateTime.Now.ToString("MM:dd:yyyy:HH:mm:ss");
+            while (CheckInvoiceNumber(NewInvoiceNumber))
+            {
+                NewInvoiceNumber = NewInvoiceNumber + "1";
+            }
+            return NewInvoiceNumber;
+        }
+
+        public bool CheckInvoiceNumber(string id)
+        {
+            return _context.CheckExistingInvoice(id);
         }
     }
 }

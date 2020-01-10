@@ -9,8 +9,9 @@ namespace DAL.Interface
     {
         List<InvoiceDTO> GetInvoice();
         InvoiceDTO GetInvoiceByID(string id);
-        bool EditInvoice(InvoiceDTO invoice);
+        bool EditInvoice(string oldID, InvoiceDTO invoice);
         bool RemoveInvoice(string id);
         bool AddInvoice(InvoiceDTO invoice);
+        bool CheckExistingInvoice(string id);
     }
 }

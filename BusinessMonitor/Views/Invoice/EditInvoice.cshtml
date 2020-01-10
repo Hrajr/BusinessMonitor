@@ -6,7 +6,7 @@
 <div class="col-11 shadow" style="padding-bottom:20px;padding-top:20px;">
     <center>
         <h1>
-            Edit: @Model.InvoiceNumber
+            Edit: @Model.SingleInvoice.InvoiceNumber
             <a class="btn btn-warning btn-xs" onclick="Enable()"><i class="fas fa-edit"></i></a>
         </h1>
         @*<small>Created by: @Model.InvoiceUser.Firstname, @Model.InvoiceUser.Lastname</small>*@
@@ -70,13 +70,13 @@
                     <div class="col-md-6 mb-3">
                         <label>Invoice date:</label>
                         <div class="input-group">
-                            <input class="form-control" id="idate" name="date" placeholder="MM/DD/YYYY" type="text" disabled/>
+                            <input class="form-control" id="idate" name="date" placeholder="MM/DD/YYYY" type="text" value="@Model.SingleInvoice.InvoiceDate.ToString("dd/MM/yyyy")" disabled/>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label>Payment date:</label>
                         <div class="input-group">
-                            <input class="form-control" id="pdate" name="date" placeholder="MM/DD/YYYY" type="text" disabled/>
+                            <input class="form-control" id="pdate" name="date" placeholder="MM/DD/YYYY" type="text" value="@Model.SingleInvoice.PayementDate.ToString("dd/MM/yyyy")" disabled/>
                         </div>
                     </div>
                 </div><br />
@@ -148,7 +148,7 @@
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
-    var startID = "";
+    var startID = "@Model.SingleInvoice.InvoiceNumber";
     function SubmitInvoice() {
         var References = document.getElementById("References").value;
         var Invoicenumber = document.getElementById("Invoicenumber").value;
@@ -156,7 +156,7 @@
         var Items = document.querySelectorAll("#AddedItems li[id]");
         var idate = document.getElementById("idate").value;
         var pdate = document.getElementById("pdate").value;
-        var istatus = document.getElementById("Available").checked; /* TODO !!!!!!!!!!!!!!!!!!!!!!! */
+        //var istatus = document.getElementById("Available").checked; /* TODO !!!!!!!!!!!!!!!!!!!!!!! */
         var userID = "@Model.SingleInvoice.InvoiceUser.ID";
         var orderlist = [] ;
         for (var i = 0; i < Items.length; i++) {
@@ -170,6 +170,7 @@
             }
         }
         console.log(orderlist);
+        istatus = false;
         $.ajax({
             type: "Post",
             dataType: "json",
@@ -184,6 +185,7 @@
                 'paymentDate': pdate,
                 'userID': userID,
                 'paymentStatus': istatus,
+                'oldID': startID
             },
             success: function () {
                 console.log("Invoice saved!");

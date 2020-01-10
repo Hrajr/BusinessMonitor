@@ -52,7 +52,7 @@ namespace DAL.SQLcontext
             return Success;
         }
 
-        public bool EditInvoice(InvoiceDTO invoice)
+        public bool EditInvoice(string oldID, InvoiceDTO invoice)
         {
             bool Success = false;
             using (SqlConnection conn = new SqlConnection(data.connection))
@@ -63,9 +63,11 @@ namespace DAL.SQLcontext
 
                     SqlCommand command = new SqlCommand("EditInvoice", conn);
                     command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@oldID", oldID));
                     command.Parameters.Add(new SqlParameter("@ID", invoice.InvoiceNumber));
                     command.Parameters.Add(new SqlParameter("@Type", invoice.TypeOfInvoice));
                     command.Parameters.Add(new SqlParameter("@Reference", invoice.InvoiceReference.ID));
+                    command.Parameters.Add(new SqlParameter("@Orderlist", invoice.InvoiceOrder.OrderID));
                     command.Parameters.Add(new SqlParameter("@InvoiceDate", invoice.InvoiceDate));
                     command.Parameters.Add(new SqlParameter("@PaymentDate", invoice.PaymentDate));
                     command.Parameters.Add(new SqlParameter("@UserID", invoice.InvoiceUser.UserID));
@@ -180,6 +182,32 @@ namespace DAL.SQLcontext
                     var reader = command.ExecuteReader();
                     reader.Read();
                     Success = true;
+                    reader.Close();
+                }
+                catch (Exception)
+                { Success = false; }
+                finally
+                { conn.Close(); }
+            }
+            return Success;
+        }
+
+        public bool CheckExistingInvoice(string id)
+        {
+            bool Success = false;
+            using (SqlConnection conn = new SqlConnection(data.connection))
+            {
+                try
+                {
+                    conn.Open();
+                    SqlCommand command = new SqlCommand("GetInvoiceByID", conn);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@ID", id));
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Success = true;
+                    }
                     reader.Close();
                 }
                 catch (Exception)
