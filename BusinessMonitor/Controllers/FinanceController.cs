@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessMonitor.Controllers
 {
-    public class TestController : Controller
+    public class FinanceController : Controller
     {
         public IActionResult Index()
         {
