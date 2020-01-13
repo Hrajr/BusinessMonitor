@@ -34,7 +34,7 @@ namespace Logic
 
         public List<Item> GetItem()
         {
-            var collectedItems = _context.GetItem().ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, ProductName = x.ProductName, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
+            var collectedItems = _context.GetItem().ConvertAll(x => new Item { ItemID = x.ItemID, Price = Math.Round(x.Price, 2), ProductName = x.ProductName, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
             return collectedItems.OrderByDescending(x => x.InStock).ThenBy(x => x.ProductName).ToList();
         }
 
@@ -47,7 +47,7 @@ namespace Logic
         {
             foreach (var item in ListOfItems)
             {
-                item.Price = _context.GetItemByID(item.ItemID).Price;
+                item.Price = Math.Round(_context.GetItemByID(item.ItemID).Price, 2);
             }
             return ListOfItems;
         }

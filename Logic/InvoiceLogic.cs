@@ -63,7 +63,8 @@ namespace Logic
             foreach (var item in collectedInvoices)
             {
                 item.InvoiceOrder = _orderlist.GetOrderByID(item.InvoiceNumber);
-                item.TotalPrice = _orderlist.GetTotalPrice(item.InvoiceOrder);
+                item.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(item.InvoiceOrder.OrderItem);
+                item.TotalPrice = Math.Round(_orderlist.GetTotalPrice(item.InvoiceOrder), 2);
             }
             return collectedInvoices.OrderBy(x => x.PaymentStatus).ThenBy(x => x.PayementDate).ToList();
         }
@@ -72,10 +73,9 @@ namespace Logic
         {
             var returnedInvoice = new Invoice(_context.GetInvoiceByID(id));
             returnedInvoice.InvoiceReference = _referenceLogic.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
-            //returnedInvoice.InvoiceUser = _userLogic.GetUserByID(returnedInvoice.InvoiceUser.ID);
             returnedInvoice.InvoiceOrder = returnedInvoice.InvoiceOrder.GetOrderByID(returnedInvoice.InvoiceOrder.OrderID);
             returnedInvoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(returnedInvoice.InvoiceOrder.OrderItem);
-            returnedInvoice.TotalPrice = _orderlist.GetTotalPrice(returnedInvoice.InvoiceOrder);
+            returnedInvoice.TotalPrice = Math.Round(_orderlist.GetTotalPrice(returnedInvoice.InvoiceOrder), 2);
             return returnedInvoice;
         }
 

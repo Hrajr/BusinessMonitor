@@ -88,5 +88,10 @@ namespace BusinessMonitor.Controllers
         {
             return _itemLogic.GetItem();
         }
+
+        public List<Item> GetAllAvailableItems()
+        {
+            return _itemLogic.GetItem().Where(x => x.InStock == true).ToList();
+        }
     }
 }

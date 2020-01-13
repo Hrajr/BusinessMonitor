@@ -37,7 +37,7 @@ namespace Logic.Models
             ProductName = item.ProductName;
             Description = item.Description;
             VAT = item.VAT;
-            Price = item.Price;
+            Price = Math.Round(item.Price, 2);
             Amount = item.Amount;
             InStock = item.InStock;
         }
@@ -50,7 +50,7 @@ namespace Logic.Models
                 ProductName = item.ProductName,
                 Description = item.Description,
                 VAT = item.VAT,
-                Price = item.Price,
+                Price = Math.Round(item.Price, 2),
                 Amount = item.Amount,
                 InStock = item.InStock
             };

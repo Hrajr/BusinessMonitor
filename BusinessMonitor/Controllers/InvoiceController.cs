@@ -22,7 +22,7 @@ namespace BusinessMonitor.Controllers
         public InvoiceController()
         {
             model.ListOfReferences = RefCont.GetAllReference();
-            model.ListOfItems = ItemCont.GetAllItems();
+            model.ListOfItems = ItemCont.GetAllAvailableItems();
             _invoiceLogic = new InvoiceLogic();
         }
 

@@ -67,7 +67,7 @@
                         <tr>
                             <td>@item.InvoiceNumber</td>
                             <td>@item.InvoiceReference.CompanyName</td>
-                            <td>@item.TotalPrice</td>
+                            <td>&#8364; @item.TotalPrice</td>
                             <td>@item.PayementDate.Date.ToString("dd/MM/yyyy")</td>
                             <td>@item.PaymentStatus</td>
                             <td><a id="@item.InvoiceNumber" asp-controller="Invoice" asp-action="EditInvoice" asp-route-id="@item.InvoiceNumber" title="Open"><button class="btn btn-primary btn-xs"><i class="fas fa-eye"></i></button></a></td>
