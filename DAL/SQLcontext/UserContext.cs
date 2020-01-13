@@ -76,6 +76,7 @@ namespace DAL.SQLcontext
                     conn.Close();
                 }
             }
+            collectedUser.UserID = id;
             return collectedUser;
         }
 

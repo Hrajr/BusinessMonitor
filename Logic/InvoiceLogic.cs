@@ -72,7 +72,7 @@ namespace Logic
         {
             var returnedInvoice = new Invoice(_context.GetInvoiceByID(id));
             returnedInvoice.InvoiceReference = _referenceLogic.GetReferenceByID(returnedInvoice.InvoiceReference.ID);
-            returnedInvoice.InvoiceUser = _userLogic.GetUserByID(returnedInvoice.InvoiceUser.ID);
+            //returnedInvoice.InvoiceUser = _userLogic.GetUserByID(returnedInvoice.InvoiceUser.ID);
             returnedInvoice.InvoiceOrder = returnedInvoice.InvoiceOrder.GetOrderByID(returnedInvoice.InvoiceOrder.OrderID);
             returnedInvoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(returnedInvoice.InvoiceOrder.OrderItem);
             returnedInvoice.TotalPrice = _orderlist.GetTotalPrice(returnedInvoice.InvoiceOrder);
