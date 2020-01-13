@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj", "{DABE8CC2-41F0-4EC3-87A8-44C4B144BE8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessMonitor.UnitTest", "UnitTestProject1\BusinessMonitor.UnitTest.csproj", "{BD101E37-673F-4B5E-80AF-5F9A97818D15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Project.UnitTest", "UnitTestProject1\Project.UnitTest.csproj", "{BD101E37-673F-4B5E-80AF-5F9A97818D15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessMonitor.IntegrationTest", "IntegrationTest\BusinessMonitor.IntegrationTest.csproj", "{4E765609-9523-4D35-9D35-5D44B250C643}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.IntegrationTest", "IntegrationTest\Project.IntegrationTest.csproj", "{4E765609-9523-4D35-9D35-5D44B250C643}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
