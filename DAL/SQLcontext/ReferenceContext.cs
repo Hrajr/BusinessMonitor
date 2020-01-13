@@ -87,7 +87,7 @@ namespace DAL.SQLcontext
                     command.Parameters.Add(new SqlParameter("@KvK", reference.KvK));
                     command.Parameters.Add(new SqlParameter("@VAT", reference.VAT));
                     command.Parameters.Add(new SqlParameter("@Doubtfull", reference.Doubtfull));
-                    command.Parameters.Add(new SqlParameter("@Date", reference.Date.ToString()));
+                    command.Parameters.Add(new SqlParameter("@Date", reference.Date));
                     command.Parameters.Add(new SqlParameter("@Note", reference.Note));
 
                     var reader = command.ExecuteReader();
@@ -220,9 +220,43 @@ namespace DAL.SQLcontext
                     reader.Close();
                 }
                 catch (Exception)
-                { Success = false; }
+                {
+                    Success = false;
+                }
                 finally
-                { conn.Close(); }
+                {
+                    conn.Close();
+                }
+            }
+            return Success;
+        }
+
+        public bool CheckReference(string id)
+        {
+            bool Success = false;
+            using (SqlConnection conn = new SqlConnection(data.connection))
+            {
+                try
+                {
+                    conn.Open();
+                    SqlCommand command = new SqlCommand("CheckReference", conn);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@ID", id));
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Success = true;
+                    }
+                    reader.Close();
+                }
+                catch (Exception)
+                {
+                    Success = false;
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             return Success;
         }

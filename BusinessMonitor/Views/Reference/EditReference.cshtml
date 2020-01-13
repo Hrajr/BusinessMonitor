@@ -81,6 +81,10 @@
                     <a for="Email">Email</a>
                     <input type="text" class="form-control form-control-sm" id="Email" placeholder="Enter email" value="@Model.Email" disabled>
                 </div>
+                <div class="form-group">
+                    <a for="Email">Doubtfull</a>
+                    <input type="checkbox" class="form-control" id="Doubtfull" placeholder="Doubtfull" @if(Model.Doubtfull){<text> checked </text>} disabled>
+                </div>
             </div>
         </div><br />
         <div class="col-md-12 text-center">
@@ -107,6 +111,7 @@
         var Phone = document.getElementById("Phonenumber").value;
         var Email = document.getElementById("Email").value;
         var Note = document.getElementById("Note").value;
+        var Doubtfull = document.getElementById("Doubtfull").checked;
         $.ajax({
             type: "Post",
             url: '/Reference/SaveReference',
@@ -125,7 +130,8 @@
                 'Country': Country,
                 'Phone': Phone,
                 'Email': Email,
-                'Note': Note
+                'Note': Note,
+                'Doubtfull': Doubtfull
             },
             success: function () {
                 console.log("geslaagd!");
@@ -149,5 +155,6 @@
         document.getElementById("Phonenumber").disabled = false;
         document.getElementById("Email").disabled = false;
         document.getElementById("Note").disabled = false;
+        document.getElementById("Doubtfull").disabled = false;
     }
 </script>

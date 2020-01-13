@@ -34,7 +34,8 @@ namespace Logic
 
         public List<Item> GetItem()
         {
-            return _context.GetItem().ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, ProductName = x.ProductName, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
+            var collectedItems = _context.GetItem().ConvertAll(x => new Item { ItemID = x.ItemID, Price = x.Price, ProductName = x.ProductName, Description = x.Description, Amount = x.Amount, InStock = x.InStock, VAT = x.VAT });
+            return collectedItems.OrderByDescending(x => x.InStock).ThenBy(x => x.ProductName).ToList();
         }
 
         public Item GetItemByID(string id)

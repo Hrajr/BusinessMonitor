@@ -5,6 +5,7 @@ using DAL.SQLcontext;
 using Logic.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Logic
@@ -58,7 +59,13 @@ namespace Logic
 
         public List<Invoice> GetInvoice()
         {
-            return _context.GetInvoice().ConvertAll(x => new Invoice { InvoiceNumber = x.InvoiceNumber, TypeOfInvoice = x.TypeOfInvoice, InvoiceReference = new Reference(x.InvoiceReference), InvoiceOrder = new OrderList(x.InvoiceOrder), InvoiceUser = new User(x.InvoiceUser), InvoiceDate = x.InvoiceDate, PayementDate = x.InvoiceDate, PaymentStatus = x.PaymentStatus });
+            var collectedInvoices = _context.GetInvoice().ConvertAll(x => new Invoice { InvoiceNumber = x.InvoiceNumber, TypeOfInvoice = x.TypeOfInvoice, InvoiceReference = new Reference(x.InvoiceReference), InvoiceOrder = new OrderList(x.InvoiceOrder), InvoiceUser = new User(x.InvoiceUser), InvoiceDate = x.InvoiceDate, PayementDate = x.InvoiceDate, PaymentStatus = x.PaymentStatus });
+            foreach (var item in collectedInvoices)
+            {
+                item.InvoiceOrder = _orderlist.GetOrderByID(item.InvoiceNumber);
+                item.TotalPrice = _orderlist.GetTotalPrice(item.InvoiceOrder);
+            }
+            return collectedInvoices.OrderBy(x => x.PaymentStatus).ThenBy(x => x.PayementDate).ToList();
         }
 
         public Invoice GetInvoiceByID(string id)
@@ -68,6 +75,7 @@ namespace Logic
             returnedInvoice.InvoiceUser = _userLogic.GetUserByID(returnedInvoice.InvoiceUser.ID);
             returnedInvoice.InvoiceOrder = returnedInvoice.InvoiceOrder.GetOrderByID(returnedInvoice.InvoiceOrder.OrderID);
             returnedInvoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(returnedInvoice.InvoiceOrder.OrderItem);
+            returnedInvoice.TotalPrice = _orderlist.GetTotalPrice(returnedInvoice.InvoiceOrder);
             return returnedInvoice;
         }
 

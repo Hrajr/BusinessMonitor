@@ -12,5 +12,6 @@ namespace DAL.Interface
         List<ReferenceDTO> GetReference();
         ReferenceDTO GetReferenceByID(string id);
         bool AddReference(ReferenceDTO referenceDTO);
+        bool CheckReference(string id);
     }
 }

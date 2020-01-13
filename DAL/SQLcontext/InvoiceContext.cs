@@ -95,7 +95,7 @@ namespace DAL.SQLcontext
 
         public List<InvoiceDTO> GetInvoice()
         {
-            List<InvoiceDTO> CollectedReferences = new List<InvoiceDTO>();
+            List<InvoiceDTO> CollectedInvoices = new List<InvoiceDTO>();
             using (SqlConnection conn = new SqlConnection(data.connection))
             {
                 try
@@ -120,7 +120,7 @@ namespace DAL.SQLcontext
                             InvoiceUser = new UserDTO() { UserID = reader["UserID"].ToString() },
                             PaymentStatus = (bool)reader["PaymentStatus"],
                         };
-                        CollectedReferences.Add(invoice);
+                        CollectedInvoices.Add(invoice);
                     }
                     reader.Close();
                 }
@@ -129,7 +129,7 @@ namespace DAL.SQLcontext
                     conn.Close();
                 }
             }
-            return CollectedReferences;
+            return CollectedInvoices;
         }
 
         public InvoiceDTO GetInvoiceByID(string id)

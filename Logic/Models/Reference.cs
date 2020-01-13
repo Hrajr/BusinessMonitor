@@ -24,6 +24,7 @@ namespace Logic.Models
         public bool Doubtfull { get; set; }
         public DateTime Date { get; set; }
         public string Note { get; set; }
+        ReferenceLogic _logic = new ReferenceLogic();
 
         public Reference()
         { }
@@ -52,45 +53,13 @@ namespace Logic.Models
         public Reference(ReferenceDTO reference)
         {
             ID = reference.ID;
-            if (reference.CompanyName == null)
+            if (_logic.ReferenceCheck(ID))
             {
-                var _logic = new ReferenceLogic();
-                var correspondingReference = _logic.GetReferenceByID(reference.ID);
-                CompanyName = correspondingReference.CompanyName;
-                ContactName = correspondingReference.ContactName;
-                Address = correspondingReference.Address;
-                Zipcode = correspondingReference.Zipcode;
-                Place = correspondingReference.Place;
-                Country = correspondingReference.Country;
-                PhoneNumber = correspondingReference.PhoneNumber;
-                Email = correspondingReference.Email;
-                Bank = correspondingReference.Bank;
-                BIC = correspondingReference.BIC;
-                IBAN = correspondingReference.IBAN;
-                KvK = correspondingReference.KvK;
-                VAT = correspondingReference.VAT;
-                Doubtfull = correspondingReference.Doubtfull;
-                Date = correspondingReference.Date;
-                Note = correspondingReference.Note;
+                ConvertToReference(reference);
             }
             else
             {
-                CompanyName = reference.CompanyName;
-                ContactName = reference.ContactName;
-                Address = reference.Address;
-                Zipcode = reference.Zipcode;
-                Place = reference.Place;
-                Country = reference.Country;
-                PhoneNumber = reference.PhoneNumber;
-                Email = reference.Email;
-                Bank = reference.Bank;
-                BIC = reference.BIC;
-                IBAN = reference.IBAN;
-                KvK = reference.KvK;
-                VAT = reference.VAT;
-                Doubtfull = reference.Doubtfull;
-                Date = reference.Date;
-                Note = reference.Note;
+                CompanyName = "This Reference has been removed...";
             }
         }
 
@@ -117,6 +86,59 @@ namespace Logic.Models
                 Note = reference.Note,
             };
             return ReturnedRef;
+        }
+
+        public void ConvertToReference(ReferenceDTO reference)
+        {
+            if (reference.CompanyName == null)
+            {
+                FillEmptyReference(reference);
+            }
+            else
+            {
+                FillReference(reference);
+            }
+        }
+
+        public void FillEmptyReference(ReferenceDTO reference)
+        {
+            var correspondingReference = _logic.GetReferenceByID(reference.ID);
+            CompanyName = correspondingReference.CompanyName;
+            ContactName = correspondingReference.ContactName;
+            Address = correspondingReference.Address;
+            Zipcode = correspondingReference.Zipcode;
+            Place = correspondingReference.Place;
+            Country = correspondingReference.Country;
+            PhoneNumber = correspondingReference.PhoneNumber;
+            Email = correspondingReference.Email;
+            Bank = correspondingReference.Bank;
+            BIC = correspondingReference.BIC;
+            IBAN = correspondingReference.IBAN;
+            KvK = correspondingReference.KvK;
+            VAT = correspondingReference.VAT;
+            Doubtfull = correspondingReference.Doubtfull;
+            Date = correspondingReference.Date;
+            Note = correspondingReference.Note;
+        }
+
+        public void FillReference(ReferenceDTO reference)
+        {
+            CompanyName = reference.CompanyName;
+            ContactName = reference.ContactName;
+            Address = reference.Address;
+            Zipcode = reference.Zipcode;
+            Place = reference.Place;
+            Country = reference.Country;
+            PhoneNumber = reference.PhoneNumber;
+            Email = reference.Email;
+            Bank = reference.Bank;
+            BIC = reference.BIC;
+            IBAN = reference.IBAN;
+            KvK = reference.KvK;
+            VAT = reference.VAT;
+            Doubtfull = reference.Doubtfull;
+            Date = reference.Date;
+            Note = reference.Note;
         }
     }
 }

@@ -36,27 +36,26 @@ namespace BusinessMonitor.Controllers
         }
 
         [HttpPost]
-        [Route("SubmitReference")]
-        public IActionResult SubmitReference(IFormCollection formCollection)
+        public IActionResult SubmitReference(string companyname, string contactname, string address, string zipcode, string place, string country, string phone, string email, string kvk, string vat, string bank, string iban, string bic, string note, bool doubtfull)
         {
-            var newReference = new Reference
+            var newReference = new Reference()
             {
-                CompanyName = formCollection["CompanyName"],
-                ContactName = formCollection["ContactName"],
-                Address = formCollection["Address"],
-                Zipcode = formCollection["Zipcode"],
-                Place = formCollection["Place"],
-                Country = formCollection["Country"],
-                PhoneNumber = formCollection["PhoneNumber"],
-                Email = formCollection["Email"],
-                Bank = formCollection["Bank"],
-                BIC = formCollection["BIC"],
-                IBAN = formCollection["IBAN"],
-                KvK = formCollection["KvK"],
-                VAT = formCollection["VAT"],
-                Doubtfull = Convert.ToBoolean(formCollection["Doubtfull"]),
-                Date = DateTime.Today,
-                Note = formCollection["Note"],
+                CompanyName = companyname,
+                ContactName = contactname,
+                Address = address,
+                Zipcode = zipcode,
+                Place = place,
+                Country = country,
+                PhoneNumber = phone,
+                Email = email,
+                KvK = kvk,
+                VAT = vat,
+                Bank = bank,
+                BIC = bic,
+                IBAN = iban,
+                Note = note,
+                Date = DateTime.Now,
+                Doubtfull = doubtfull
             };
             if (_referenceLogic.AddReference(newReference))
             { return View("AddReference"); }

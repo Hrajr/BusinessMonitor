@@ -101,7 +101,7 @@
                         </ul>
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Total (EU)</span>
-                            <strong id="TotalAmount">€0</strong>
+                            <strong id="TotalAmount">€ @Model.SingleInvoice.TotalPrice</strong>
                         </li>
                     </div>
                 </div>
@@ -169,7 +169,6 @@
                 orderlist.push(JSON.stringify({ itemID: Items[i].id, amount: Oldamount.value }));
             }
         }
-        console.log(orderlist);
         istatus = false;
         $.ajax({
             type: "Post",
@@ -188,7 +187,7 @@
                 'oldID': startID
             },
             success: function () {
-                console.log("Invoice saved!");
+                alert("Invoicenumber saved: " + Invoicenumber);
             }
         });
     }
@@ -237,10 +236,7 @@
         var name = _id.split(":")[3];
         var desc = _id.split(":")[2];
         var price = _id.split(":")[1];
-        console.log(returnItems.length);
-        console.log(returnItems.length == 0);
         if (returnItems.length == 0) {
-            console.log("Halooo");
             returnItems.push(_id.split(":"));
             PrintDIV(checkid, name, desc, price, true);
         }

@@ -3,7 +3,7 @@
     ViewData["Title"] = "AddReference";
 }
 
-<form asp-controller="Reference" class="container">
+<div class="container">
     <br />
     <div class="col-11 shadow" style="padding-bottom:20px;padding-top:20px;padding-left:3%;padding-right:3%;">
         <center><h1>Add new reference</h1></center><br />
@@ -76,38 +76,59 @@
                     <a for="Email">Email</a>
                     <input type="text" class="form-control form-control-sm" name="Email" id="Email" placeholder="Enter email">
                 </div>
+                <div class="form-group">
+                    <a for="Email">Doubtfull</a>
+                    <input type="checkbox" class="form-control" name="Doubtfull" id="Doubtfull" placeholder="Doubtfull">
+                </div>
             </div>
         </div><br />
         <div class="col-md-12 text-center">
-            <button type="submit" asp-action="SubmitReference" class="btn btn-info btn-lg">Add item</button>
+            <button type="submit" onclick="SubmitItem()" class="btn btn-info btn-lg">Add item</button>
         </div>
-    </div>  
-</form>
+    </div>
+</div>
 
-@*<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
-    function SubmitItem(Name, Desc, Price, VAT, Amount) {
-        var Name = document.getElementById("ProductName").value;
-        var Desc = document.getElementById("ProductDescription").value;
-        var Price = document.getElementById("Price").value;
+    function SubmitItem() {
+        var Companyname = document.getElementById("Companyname").value;
+        var KvK = document.getElementById("KvK").value;
+        var IBAN = document.getElementById("IBAN").value;
         var VAT = document.getElementById("VAT").value;
-        var Amount = document.getElementById("Amount").value;
-        var Available = document.getElementById("Available").checked;
-        console.log(Amount);
+        var BANK = document.getElementById("Bank").value;
+        var BIC = document.getElementById("BIC").value;
+        var Contactname = document.getElementById("Contactname").value;
+        var Address = document.getElementById("Address").value;
+        var Zipcode = document.getElementById("Zipcode").value;
+        var Place = document.getElementById("Place").value;
+        var Country = document.getElementById("Country").value;
+        var Phone = document.getElementById("Phonenumber").value;
+        var Email = document.getElementById("Email").value;
+        var Note = document.getElementById("Note").value;
+        var Doubtfull = document.getElementById("Doubtfull").checked;
         $.ajax({
             type: "Post",
-            url: '/Item/SubmitItem',
+            url: '/Reference/SubmitReference',
             data: {
-                'Name': Name,
-                'Desc': Desc,
-                'Price': Price,
+                'Companyname': Companyname,
+                'KvK': KvK,
+                'IBAN': IBAN,
                 'VAT': VAT,
-                'Amount': Amount,
-                'Available': Available
+                'BANK': BANK,
+                'BIC': BIC,
+                'Contactname': Contactname,
+                'Address': Address,
+                'Zipcode': Zipcode,
+                'Place': Place,
+                'Country': Country,
+                'Phone': Phone,
+                'Email': Email,
+                'Note': Note,
+                'Doubtfull': Doubtfull
             },
             success: function () {
                 console.log("geslaagd!");
             }
         });
     }
-</script>*@
+</script>

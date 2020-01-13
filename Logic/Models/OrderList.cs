@@ -109,5 +109,15 @@ namespace Logic.Models
         {
             return _context.RemoveOrder(ID);
         }
+
+        public decimal GetTotalPrice(OrderList items)
+        {
+            var totalPrice = new decimal();
+            foreach (var item in items.OrderItem)
+            {
+                totalPrice = totalPrice + (item.Price * item.Amount);
+            }
+            return totalPrice;
+        }
     }
 }
