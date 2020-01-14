@@ -93,5 +93,12 @@ namespace BusinessMonitor.Controllers
         {
             return _itemLogic.GetItem().Where(x => x.InStock == true).ToList();
         }
+
+        [HttpPost]
+        public IActionResult TestSave(Item item)
+        {
+            var testItem = item;
+            return View("AddItem");
+        }
     }
 }

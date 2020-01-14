@@ -8,11 +8,11 @@ using Xunit;
 
 namespace IntegrationTest
 {
-    public class BusinessTest : IClassFixture<WebApplicationFactory<Startup>>
+    public class BasicTest : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly WebApplicationFactory<Startup> _factory;
 
-        public BusinessTest(WebApplicationFactory<Startup> factory)
+        public BasicTest(WebApplicationFactory<Startup> factory)
         {
             _factory = factory;
         }
@@ -24,6 +24,9 @@ namespace IntegrationTest
         [InlineData("/Reference")]
         [InlineData("/Registration")]
         [InlineData("/Login")]
+        [InlineData("/NewInvoice")]
+        [InlineData("/AddItem")]
+        [InlineData("/AddReference")]
         [InlineData("/EditInvoice?id=Purchase%3A01%3A13%3A2020%3A20%3A37%3A57")]
         [InlineData("/EditItem?id=5C704287-C86E-4FC6-B307-44128CCEF36C")]
         [InlineData("/EditReference?id=5069609E-5383-4D86-8CFE-A7B8BFC38C38")]
