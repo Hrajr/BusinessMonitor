@@ -11,13 +11,15 @@ namespace Logic.Models
     public class OrderList
     {
         private readonly iOrderlist _context;
-        private readonly ItemLogic _itemLogic = new ItemLogic();
+        private readonly iItem itemInterface;
+        private readonly ItemLogic _itemLogic;
         public string OrderID { get; set; }
         public List<Item> OrderItem { get; set; }
 
         public OrderList()
         {
             _context = new OrderlistContext();
+            _itemLogic = new ItemLogic(itemInterface);
         }
 
         public OrderList(List<Item> list)

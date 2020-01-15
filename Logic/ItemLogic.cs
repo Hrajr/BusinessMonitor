@@ -13,10 +13,11 @@ namespace Logic
     {
         private readonly iItem _context;
 
-        public ItemLogic()
+        public ItemLogic(iItem context)
         {
-            _context = new ItemContext();
+            _context = context;
         }
+
         public bool AddItem(Item item)
         {
             return _context.AddItem(item.ConvertToDTO(item));

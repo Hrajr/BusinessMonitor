@@ -13,6 +13,7 @@ namespace Logic
     public class InvoiceLogic
     {
         private readonly iInvoice _context;
+        private readonly iItem item;
         private readonly ReferenceLogic _referenceLogic;
         private readonly UserLogic _userLogic;
         private readonly ItemLogic _itemLogic;
@@ -23,7 +24,7 @@ namespace Logic
             _context = new InvoiceContext();
             _referenceLogic = new ReferenceLogic();
             _userLogic = new UserLogic();
-            _itemLogic = new ItemLogic();
+            _itemLogic = new ItemLogic(item);
             _orderlist = new OrderList();
         }
 

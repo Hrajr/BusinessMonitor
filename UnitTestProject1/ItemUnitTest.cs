@@ -14,6 +14,7 @@ namespace UnitTestProject1
     {
         private List<Item> ListOfItems;
         private MockItem ListOfMockItems;
+        private ItemLogic itemLogic;
 
         [TestInitialize]
         public void Setup_Test()
@@ -24,6 +25,30 @@ namespace UnitTestProject1
             {
                 ListOfItems.Add(new Item(item));
             };
+        }
+
+        [TestMethod]
+        public void Get_All_Items_Test_Succesfull_Logic()
+        {
+            Mock<iItem> mockItems = new Mock<iItem>();
+            mockItems.Setup(x => x.GetItem()).Returns(ListOfMockItems.ItemsMock);
+
+            itemLogic = new ItemLogic(mockItems.Object);
+            var result = itemLogic.GetItem();
+
+            Assert.AreEqual(result[1].ItemID, ListOfMockItems.ItemsMock[1].ItemID);
+        }
+
+        [TestMethod]
+        public void Get_All_Items_Test_Unsuccesfull_Logic()
+        {
+            Mock<iItem> mockItems = new Mock<iItem>();
+            mockItems.Setup(x => x.GetItem()).Returns(ListOfMockItems.ItemsMock);
+
+            itemLogic = new ItemLogic(mockItems.Object);
+            var result = itemLogic.GetItem();
+
+            Assert.AreNotEqual(result[1].ItemID, ListOfMockItems.ItemsMock[3].ItemID);
         }
 
         [TestMethod]
