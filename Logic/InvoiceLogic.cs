@@ -32,7 +32,6 @@ namespace Logic
             invoice.InvoiceNumber = GenerateInvoiceNumber(invoice.TypeOfInvoice);
             invoice.InvoiceOrder.AddOrderlist(GenerateInvoiceNumber(invoice.TypeOfInvoice), invoice.InvoiceOrder);
             invoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(invoice.InvoiceOrder.OrderItem);
-            invoice.InvoiceReference = _referenceLogic.GetReferenceByID(invoice.InvoiceReference.ID);
             return _context.AddInvoice(invoice.ConvertToDTO(invoice));
         }
 
@@ -48,8 +47,7 @@ namespace Logic
 
         public bool EditInvoice(string oldID, Invoice invoice)
         {
-            invoice.InvoiceReference = _referenceLogic.GetReferenceByID(invoice.InvoiceReference.ID);
-            if (CheckInvoiceNumber(invoice.InvoiceNumber))
+            if (CheckInvoiceNumber(invoice.InvoiceNumber) && invoice.InvoiceNumber != oldID)
             { GenerateInvoiceNumber(invoice.TypeOfInvoice); }
             invoice.InvoiceOrder.OrderItem = _itemLogic.GetPriceOfList(invoice.InvoiceOrder.OrderItem);
             invoice.InvoiceOrder.OrderID = invoice.InvoiceNumber;
@@ -79,7 +77,7 @@ namespace Logic
             return returnedInvoice;
         }
 
-        public string GenerateInvoiceNumber(Invoicetype info)
+        private string GenerateInvoiceNumber(Invoicetype info)
         {
             var NewInvoiceNumber = info.ToString();
             NewInvoiceNumber = NewInvoiceNumber + ":" + DateTime.Now.ToString("MM:dd:yyyy:HH:mm:ss");
@@ -90,7 +88,7 @@ namespace Logic
             return NewInvoiceNumber;
         }
 
-        public bool CheckInvoiceNumber(string id)
+        private bool CheckInvoiceNumber(string id)
         {
             return _context.CheckExistingInvoice(id);
         }

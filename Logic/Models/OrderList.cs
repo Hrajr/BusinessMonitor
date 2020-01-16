@@ -90,8 +90,9 @@ namespace Logic.Models
 
         public bool UpdateOrderlist(string oldID, string newID, OrderList items)
         {
-            if (AddOrderlist(newID, items) && DeleteOrder(oldID))
+            if (AddOrderlist(newID, items))
             {
+                IDcheck(oldID, newID);
                 return true;
             }
             else
@@ -118,6 +119,14 @@ namespace Logic.Models
                 totalPrice = totalPrice + (item.Price * item.Amount);
             }
             return totalPrice;
+        }
+
+        private void IDcheck(string oldID, string newID)
+        {
+            if (newID != oldID)
+            {
+                DeleteOrder(oldID);
+            }
         }
     }
 }
