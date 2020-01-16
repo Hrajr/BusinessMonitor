@@ -65,9 +65,22 @@ namespace BusinessMonitor.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult RegistrationForm([Bind("Username, Password, Firstname, Lastname, Address, Zipcode, Place, Phone, Email")] User user)
+        public IActionResult RegistrationForm([Bind("Username, Password, Firstname, Lastname, Address, Zipcode, Place, Phone, Email, Admin")] RegisterViewModel viewmodel)
         {
-            if (!ModelState.IsValid || !_userLogic.Registration(user))
+            var newUser = new User()
+            {
+                Username = viewmodel.Username,
+                Password = viewmodel.Password,
+                Firstname = viewmodel.Firstname,
+                Lastname = viewmodel.Lastname,
+                Address = viewmodel.Address,
+                Zipcode = viewmodel.Zipcode,
+                Place = viewmodel.Place,
+                Phone = viewmodel.Phone,
+                Email = viewmodel.Email,
+                Admin = viewmodel.Admin
+            };
+            if (!ModelState.IsValid || !_userLogic.Registration(newUser))
             { return View("Registration"); }
             return RedirectToAction("Login", "Session");
         }

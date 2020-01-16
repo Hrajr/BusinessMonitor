@@ -19,7 +19,6 @@ namespace Logic.Models
         public string Email { get; set; }
         public bool Admin { get; set; } = false;
         public string Salt { get; set; }
-        private readonly UserLogic userLogic = new UserLogic();
 
         public User()
         { }
@@ -58,6 +57,7 @@ namespace Logic.Models
             {
                 UserID = user.ID,
                 Username = user.Username,
+                Password = user.Password,
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
                 Address = user.Address,
@@ -73,6 +73,7 @@ namespace Logic.Models
 
         public void FillEmptyUser(UserDTO user)
         {
+            var userLogic = new UserLogic();
             var correspondingUser = userLogic.GetUserByID(user.UserID);
             Username = correspondingUser.Username;
             Password = correspondingUser.Password;

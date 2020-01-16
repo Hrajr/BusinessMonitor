@@ -142,7 +142,6 @@
                 orderlist.push(JSON.stringify({ itemID: Items[i].id, amount: Oldamount.value }));
             }
         }
-        console.log(orderlist);
         $.ajax({
             type: "Post",
             dataType: "json",
@@ -157,9 +156,10 @@
                 'paymentDate': pdate,
             },
             success: function () {
-                console.log("Invoice saved!");
+                alert("Your invoice has been added. Go to the main invoice page to see all your invoices.");
             }
         });
+        alert("Your invoice has been added. Go to the main invoice page to see all your invoices.");
     }
     function AddItem() {
         var e = document.getElementById("NewItem");

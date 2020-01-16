@@ -114,7 +114,7 @@ namespace DAL.SQLcontext
         public bool Registration(UserDTO user)
         {
             bool RegistrationSuccess = false;
-            using (SqlConnection conn = new SqlConnection(Data.con.ConnectionString))
+            using (SqlConnection conn = new SqlConnection(Data.connection))
             {
                 try
                 {
