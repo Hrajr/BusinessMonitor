@@ -13,16 +13,16 @@ namespace DAL.SQLcontext
     {
         private readonly DB Data = new DB();
 
-        public bool AdminCheck(UserDTO user)
+        public bool CheckUserExists(UserDTO user)
         {
-            bool isAdmin = false;
+            bool Exists = false;
 
             using (SqlConnection conn = new SqlConnection(Data.connection))
             {
                 try
                 {
                     conn.Open();
-                    SqlCommand command = new SqlCommand("AdminCheck", conn);
+                    SqlCommand command = new SqlCommand("CheckUserExists", conn);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("@UserID", user.UserID));
 
@@ -30,7 +30,7 @@ namespace DAL.SQLcontext
 
                     while (reader.Read())
                     {
-                        isAdmin = (bool)reader["Admin"];
+                        Exists = true;
                     }
                     reader.Close();
                 }
@@ -39,7 +39,7 @@ namespace DAL.SQLcontext
                     conn.Close();
                 }
             }
-            return isAdmin;
+            return Exists;
         }
 
         public UserDTO GetUserInfo(string id)
@@ -100,7 +100,8 @@ namespace DAL.SQLcontext
                         user.Username = reader["Username"].ToString();
                         user.Password = reader["Password"].ToString();
                         user.Salt = reader["Salt"].ToString();
-                    }
+                        user.Admin = (bool)reader["Admin"];
+                    };
                     reader.Close();
                 }
                 finally

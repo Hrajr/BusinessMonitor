@@ -12,9 +12,11 @@ namespace Logic
         private readonly iUser _context;
         private static readonly Hash Hashing = new Hash();
         private static readonly Encryptor Crypto = new Encryptor();
+        private User currentUser;
 
         public UserLogic()
         {
+            currentUser = new User();
             _context = new UserContext();
         }
 
@@ -24,23 +26,33 @@ namespace Logic
             string Input = user.Password;
 
             user = new User(_context.Login(user.ConvertToDTO(user)));
-            user.Password = Hashing.GetHash(Input, user.Salt);
-
-            if (HashValid(Input, user.Salt, user.Password))
+            currentUser.ID = user.ID;
+            currentUser.Admin = user.Admin;
+            if (user.ID != null)
             {
-                Success = true;
+                user.Password = Hashing.GetHash(Input, user.Salt);
+
+                if (HashValid(Input, user.Salt, user.Password))
+                {
+                    Success = true;
+                }
             }
             return Success;
+        }
+
+        public string MyID()
+        {
+            return currentUser.ID;
+        }
+
+        public bool AdminCheck()
+        {
+            return currentUser.Admin;
         }
 
         private static bool HashValid(string Input, string Salt, string Password)
         {
             return Hashing.Validate(Input, Salt, Password);
-        }
-
-        public bool AdminCheck(User user)
-        {
-            return _context.AdminCheck(user.ConvertToDTO(user));
         }
 
         public User GetUserByID(string id)
@@ -93,8 +105,11 @@ namespace Logic
 
         private User HashUser(User user)
         {
-            user.Salt = GetSalt();
-            user.Password = Hashing.GetHash(user.Password, user.Salt);
+            if (user.ID != null)
+            {
+                user.Salt = GetSalt();
+                user.Password = Hashing.GetHash(user.Password, user.Salt);
+            }
             return user;
         }
 

@@ -42,9 +42,10 @@ namespace BusinessMonitor.Controllers
 
             if (_userLogic.Login(new User() { Username = user.Username, Password = user.Password }))
             {
-                //InitUser(user);
+                InitUser(user);
+                return View("Invoice");
             }
-            return View();
+            return View("Item");
         }
 
         public IActionResult Logout()
@@ -60,22 +61,31 @@ namespace BusinessMonitor.Controllers
 
         private async void InitUser(LoginViewModel user)
         {
-            user.Admin = _userLogic.AdminCheck(new User() { ID = User.Identity.Name } );
-            var claims = new List<Claim>
-            { new Claim(ClaimTypes.Name, user.ID) };
-            if (user.Admin)
-            { claims.Add(new Claim(ClaimTypes.Role, "Admin")); }
-            else
-            { claims.Add(new Claim(ClaimTypes.Role, "User")); }
+                var claims = new List<Claim>
+            { new Claim(ClaimTypes.Name, MyID()) };
+                if (AdminCheck())
+                { claims.Add(new Claim(ClaimTypes.Role, "Admin")); }
+                else
+                { claims.Add(new Claim(ClaimTypes.Role, "User")); }
 
 
-            ClaimsPrincipal principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
-            var authProp = new AuthenticationProperties
-            {
-                IsPersistent = true,
-                ExpiresUtc = DateTime.UtcNow.AddMinutes(20) //Cookies will be saved for 20 minutes
-            };
-            await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProp);
+                ClaimsPrincipal principal = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+                var authProp = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(20) //Cookies will be saved for 20 minutes
+                };
+                await this.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProp);
+        }
+
+        public string MyID()
+        {
+            return _userLogic.MyID();
+        }
+
+        private bool AdminCheck()
+        {
+            return _userLogic.AdminCheck();
         }
     }
 }

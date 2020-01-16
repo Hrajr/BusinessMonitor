@@ -41,7 +41,7 @@ namespace Logic.Models
 
         public User(UserDTO user)
         {
-            if (user.Firstname == null)
+            if (user.Username == null)
             {
                 FillEmptyUser(user);
             }
@@ -49,6 +49,13 @@ namespace Logic.Models
             {
                 ConvertToUser(user);
             }
+        }
+
+        public User (User user)
+        {
+            ID = user.ID;
+            Username = user.Username;
+            Admin = user.Admin;
         }
 
         public UserDTO ConvertToDTO(User user)
