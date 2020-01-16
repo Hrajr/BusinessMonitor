@@ -13,9 +13,9 @@ namespace Logic
     {
         private readonly iItem _context;
 
-        public ItemLogic(iItem context)
+        public ItemLogic()
         {
-            _context = context;
+            _context = new ItemContext();
         }
 
         public bool AddItem(Item item)
