@@ -42,19 +42,19 @@ namespace BusinessMonitor.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveInvoice(string id, string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string userID, string paymentStatus, string oldID)
+        public IActionResult SaveInvoice(string id, string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string userID, bool paymentStatus, string oldID)
         {
-            var collectedInformation = new Invoice(id, referenceID, orderlist, invoiceType, User.Identity.Name, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
-            collectedInformation.InvoiceUser = new User() { ID = "5353A3AC-7EA7-4A68-B428-8D1734569872" };
+            var collectedInformation = new Invoice(id, referenceID, orderlist, invoiceType, User.Identity.Name, invoiceDate, paymentDate, paymentStatus);
+            collectedInformation.InvoiceUser = new User() { ID = User.Identity.Name };
             _invoiceLogic.EditInvoice(oldID ,collectedInformation);
-            return View();
+            return RedirectToAction("Invoice");
         }
 
         [HttpPost]
         public IActionResult SubmitInvoice(string invoiceType, string[] orderlist, string referenceID, DateTime invoiceDate, DateTime paymentDate, string paymentStatus)
         {
             var collectedNewInformation = new Invoice(referenceID, orderlist, invoiceType, invoiceDate, paymentDate, Convert.ToBoolean(paymentStatus));
-            collectedNewInformation.InvoiceUser = new User() { ID = "5353A3AC-7EA7-4A68-B428-8D1734569872" };
+            collectedNewInformation.InvoiceUser = new User() { ID = User.Identity.Name };
             _invoiceLogic.AddInvoice(collectedNewInformation);
             return View("Invoice");
         }

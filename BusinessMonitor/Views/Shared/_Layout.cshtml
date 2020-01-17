@@ -27,49 +27,46 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Item" asp-action="Item">Item</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Reference" asp-action="Reference">Reference</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Invoice" asp-action="Invoice">Invoice</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Invoice" asp-action="NewInvoice">Test</a>
-                        </li>
-                        @if (User.IsInRole("Admin"))
-                        {
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Session" asp-action="Admin">AdminPage</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
-                        }
-                        @if (User.IsInRole("User"))
-                        {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Profile">Profile</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Item" asp-action="Item">Item</a>
                             </li>
-                        }
-                    </ul>
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <a asp-action="Login" asp-controller="Session">
-                            <p class="btn btn-outline-success my-2 my-sm-0">Log in</p>
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-action="Logout" asp-controller="Session">
-                            <p class="btn btn-outline-success my-2 my-sm-0">Log out</p>
-                        </a>
-                    }
-                </div>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reference" asp-action="Reference">Reference</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Invoice" asp-action="Invoice">Invoice</a>
+                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Session" asp-action="Admin">Admin</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("User"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Profile">Profile</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <a asp-action="Logout" asp-controller="Session">
+                        <p class="btn btn-outline-success my-2 my-sm-0">Log out</p>
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="Login" asp-controller="Session">
+                        <p class="btn btn-outline-success my-2 my-sm-0">Log in</p>
+                    </a>
+                }
             </div>
         </nav>
     </header>
