@@ -119,24 +119,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <script>
     var ctx = document.getElementById("myChart");
+    var payed = @Model.ListOfInvoices.Where(x => x.PaymentStatus == true).Count();;
+    var open = @Model.ListOfInvoices.Where(x => x.PaymentStatus == false).Count();;
     var myChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: ['Debit open', 'Debit payed', 'Credit open', 'Credit payed'],
+            labels: ['Payed invoices', 'Open invoices'],
             datasets: [{
                 label: '# of Tomatoes',
-                data: [12, 19, 3, 5],
+                data: [payed, open],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
+                    'rgba(54, 162, 235, 0.2)'
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)'
+                    'rgba(54, 162, 235, 1)'
                 ],
                 borderWidth: 1
             }]
