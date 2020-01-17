@@ -31,29 +31,10 @@ namespace BusinessMonitor.Controllers
             return View();
         }
 
-        [Route("TestingPage")]
-        public IActionResult TestingPage()
-        {
-            string Message1 = User.Identity.Name;
-            string Message2 = User.IsInRole("Admin") ? "Admin" : "User";
-            ViewData["AAA"] = Message1;
-            ViewData["BBB"] = Message2;
-            return View();
-        }
-
         public IActionResult AdminPage()
         {
             return View();
         }
-
-        //[Route("Profile")]
-        //[HttpGet]
-        //public IActionResult Profile()
-        //{
-        //    var ActiveUser = new User { ID = User.Identity.Name };
-        //    var model = new LoginViewModel(_userLogic.GetUserInfo(ActiveUser));
-        //    return View("Profile", model);
-        //}
 
         [Route("Registration")]
         [HttpGet]

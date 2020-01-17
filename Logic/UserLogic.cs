@@ -71,9 +71,19 @@ namespace Logic
 
         public bool Registration(User user)
         {
-            user = HashUser(user);
-            user = InfoEncryptor(user);
-            return _context.Registration(user.ConvertToDTO(user));
+            return EmailCheck(user);
+        }
+
+        private bool EmailCheck(User user)
+        {
+            var returnStatus = _context.GetAllUsers().Where(X => Crypto.Decrypt(X.Email) == user.Email).ToList();
+            if (returnStatus == null || returnStatus.Count == 0)
+            {
+                user = HashUser(user);
+                user = InfoEncryptor(user);
+                return _context.Registration(user.ConvertToDTO(user));
+            }
+            else return false;
         }
 
         public bool RemoveUser(string id)

@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using BusinessMonitor.Models;
 using Logic;
 using Logic.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessMonitor.Controllers
 {
+    [Authorize]
     public class ItemController : Controller
     {
         private readonly ItemLogic _itemLogic;

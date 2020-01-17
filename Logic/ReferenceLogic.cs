@@ -20,7 +20,7 @@ namespace Logic
 
         public bool AddReference(Reference reference)
         {
-            return _context.AddReference(reference.ConvertToDTO(reference));
+            return IBANcheck(reference);
         }
 
         public bool RemoveReference(string id)
@@ -47,6 +47,16 @@ namespace Logic
         public bool ReferenceCheck(string id)
         {
             return _context.CheckReference(id);
+        }
+
+        private bool IBANcheck(Reference reference)
+        {
+            var returnStatus = _context.GetReference().Where(X => X.IBAN == reference.IBAN).ToList();
+            if (returnStatus == null || returnStatus.Count == 0)
+            {
+                return _context.AddReference(reference.ConvertToDTO(reference));
+            }
+            else return false;
         }
     }
 }

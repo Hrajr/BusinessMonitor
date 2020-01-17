@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessMonitor.Controllers
 {
+    [Authorize]
     public class SessionController : Controller
     {
         private readonly UserLogic _userLogic;
@@ -51,11 +52,14 @@ namespace BusinessMonitor.Controllers
 
         [Route("Admin")]
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Admin()
         {
-            var allUsers = new AdminViewModel(_userLogic.GetAllUsers());
-            return User.Identity.IsAuthenticated ? View("Admin", allUsers) : View("Signin");
+            if (User.IsInRole("Admin"))
+            {
+                var allUsers = new AdminViewModel(_userLogic.GetAllUsers());
+                return View("Admin", allUsers);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

@@ -32,7 +32,8 @@ namespace DAL.SQLcontext
                         var singleUser = new UserDTO()
                         {
                             UserID = reader["ID"].ToString(),
-                            Username = reader["Username"].ToString()
+                            Username = reader["Username"].ToString(),
+                            Email = reader["Email"].ToString()
                         };
                         AllUsers.Add(singleUser);
                     }
