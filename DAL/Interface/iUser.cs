@@ -7,9 +7,10 @@ namespace DAL.Interface
 {
     public interface iUser
     {
-        bool CheckUserExists(UserDTO userDTO);
+        List<UserDTO> GetAllUsers();
         UserDTO Login(UserDTO userDTO);
         UserDTO GetUserInfo(string id);
         bool Registration(UserDTO userDTO);
+        bool RemoveUser(string id);
     }
 }

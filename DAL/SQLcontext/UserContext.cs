@@ -13,24 +13,28 @@ namespace DAL.SQLcontext
     {
         private readonly DB Data = new DB();
 
-        public bool CheckUserExists(UserDTO user)
+        public List<UserDTO> GetAllUsers()
         {
-            bool Exists = false;
+            var AllUsers = new List<UserDTO>();
 
             using (SqlConnection conn = new SqlConnection(Data.connection))
             {
                 try
                 {
                     conn.Open();
-                    SqlCommand command = new SqlCommand("CheckUserExists", conn);
+                    SqlCommand command = new SqlCommand("GetAllUsers", conn);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("@UserID", user.UserID));
 
                     var reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        Exists = true;
+                        var singleUser = new UserDTO()
+                        {
+                            UserID = reader["ID"].ToString(),
+                            Username = reader["Username"].ToString()
+                        };
+                        AllUsers.Add(singleUser);
                     }
                     reader.Close();
                 }
@@ -39,7 +43,7 @@ namespace DAL.SQLcontext
                     conn.Close();
                 }
             }
-            return Exists;
+            return AllUsers;
         }
 
         public UserDTO GetUserInfo(string id)
@@ -149,6 +153,30 @@ namespace DAL.SQLcontext
                 }
             }
             return RegistrationSuccess;
+        }
+
+        public bool RemoveUser(string id)
+        {
+            bool Success = false;
+            using (SqlConnection conn = new SqlConnection(Data.connection))
+            {
+                try
+                {
+                    conn.Open();
+                    SqlCommand command = new SqlCommand("DeleteAccount", conn);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@ID", id));
+                    var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    { Success = true; }
+                    reader.Close();
+                }
+                catch (Exception)
+                { Success = false; }
+                finally
+                { conn.Close(); }
+            }
+            return Success;
         }
     }
 }

@@ -47,7 +47,7 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AdminPage">AdminPage</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Session" asp-action="Admin">AdminPage</a>
                             </li>
                         }
                         @if (User.IsInRole("User"))

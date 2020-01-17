@@ -28,7 +28,8 @@ namespace BusinessMonitor.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
-            return User.Identity.IsAuthenticated ? View("Profile") : View("Signin");
+            var allUsers = new AdminViewModel(_userLogic.GetAllUsers());
+            return User.Identity.IsAuthenticated ? View("Admin", allUsers) : View("Signin");
         }
 
         [HttpPost]
@@ -37,14 +38,30 @@ namespace BusinessMonitor.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Login");
+                return View("Signin");
             }
 
             if (_userLogic.Login(new User() { Username = user.Username, Password = user.Password }))
             {
                 InitUser(user);
-                return View("Invoice");
+                return RedirectToAction("Admin");
             }
+            return View("Signin");
+        }
+
+        [Route("Admin")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Admin()
+        {
+            var allUsers = new AdminViewModel(_userLogic.GetAllUsers());
+            return User.Identity.IsAuthenticated ? View("Admin", allUsers) : View("Signin");
+        }
+
+        [HttpPost]
+        public IActionResult RemoveUser(string id)
+        {
+            _userLogic.RemoveUser(id);
             return View("Item");
         }
 

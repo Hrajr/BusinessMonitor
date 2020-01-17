@@ -4,6 +4,8 @@ using Logic.Encryption;
 using Logic.Hasher;
 using Logic.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Logic
 {
@@ -62,11 +64,21 @@ namespace Logic
             return user;
         }
 
+        public List<User> GetAllUsers()
+        {
+            return currentUser.ConvertListOfUsers(_context.GetAllUsers().OrderBy(x => x.Username).ThenBy(x => x.UserID).ToList());
+        }
+
         public bool Registration(User user)
         {
             user = HashUser(user);
             user = InfoEncryptor(user);
             return _context.Registration(user.ConvertToDTO(user));
+        }
+
+        public bool RemoveUser(string id)
+        {
+            return _context.RemoveUser(id);
         }
 
         private User InfoEncryptor(User user)
@@ -105,11 +117,8 @@ namespace Logic
 
         private User HashUser(User user)
         {
-            if (user.ID != null)
-            {
                 user.Salt = GetSalt();
                 user.Password = Hashing.GetHash(user.Password, user.Salt);
-            }
             return user;
         }
 

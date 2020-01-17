@@ -110,5 +110,18 @@ namespace Logic.Models
             Admin = user.Admin;
             Salt = user.Salt;
         }
+
+        public List<User> ConvertListOfUsers(List<UserDTO> list)
+        {
+            var newList = new List<User>();
+            foreach (var item in list)
+            {
+                newList.Add(new User() {
+                    ID = item.UserID,
+                    Username = item.Username
+                });
+            }
+            return newList;
+        }
     }
 }
